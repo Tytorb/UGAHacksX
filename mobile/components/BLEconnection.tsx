@@ -10,7 +10,7 @@ export function BLEconnection(props: {}) {
         // Success code
         console.log("Module initialized");
 
-        BleManager.scan([], 0, true).then(
+        BleManager.scan(["4fafc201-1fb5-459e-8fcc-c5c9c331914b"], 20, true).then(
             () => {
                 // Success code
                 setScanState("scaning")
