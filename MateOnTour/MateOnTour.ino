@@ -6,8 +6,14 @@
 #include <Arduino.h>
 #include "FS.h"
 #include <LittleFS.h>
-#define FORMAT_LITTLEFS_IF_FAILED true
 
+#include <ESP32Time.h>
+
+//ESP32Time rtc;
+ESP32Time rtc(3600);  // offset in seconds GMT+1
+
+
+#define FORMAT_LITTLEFS_IF_FAILED true
 #define CLEAR_SENSOR_STORAGE false
 
 
@@ -34,6 +40,8 @@ bool deviceConnected = false;
 
 double tempF;
 
+char *sensorBuff = (char*)calloc(100, sizeof(char)); ;
+
 class MyServerCallbacks : public BLEServerCallbacks {
   void onConnect(BLEServer *pServer) {
     deviceConnected = true;
@@ -46,6 +54,7 @@ class MyServerCallbacks : public BLEServerCallbacks {
 
 void setup() {
   Serial.begin(115200);
+  rtc.setTime(30, 24, 15, 8, 2, 2024);  // 17th Jan 2021 15:24:30
 
   // Settng up recording files
   if (!LittleFS.begin(FORMAT_LITTLEFS_IF_FAILED)) {
@@ -106,7 +115,7 @@ void setup() {
         //Set sensor characteristic value and notify connected client
         sensorDataCharacteristic.setValue(buff);
         sensorDataCharacteristic.notify();
-        delay(50);
+        delay(100);
       }
       writeFile(LittleFS, "/tempF.txt", "");
     }
@@ -149,14 +158,16 @@ void setup() {
 }
 
 void loop() {
-  if (deviceConnected) {
-    // put your main code here, to run repeatedly:
-    tempF = random(500) / 10;
-    static char temperatureFTemp[6];
-    dtostrf(tempF, 6, 2, temperatureFTemp);
-    Serial.println(tempF);
-    appendFile(LittleFS, "/tempF.txt", temperatureFTemp);
-    appendFile(LittleFS, "/tempF.txt", ";");
-    delay(1000);
-  }
+  // put your main code here, to run repeatedly:
+  tempF = random(500) / 10;
+  static char temperatureFTemp[6];
+  dtostrf(tempF, 6, 2, temperatureFTemp);
+  sprintf(sensorBuff, "%lu", rtc.getEpoch());
+  strcat(sensorBuff, " ");
+  strcat(sensorBuff, temperatureFTemp);
+  strcat(sensorBuff, ";");
+  Serial.println(sensorBuff);
+  appendFile(LittleFS, "/tempF.txt", sensorBuff);
+  memset(sensorBuff, '\0', sizeof(sensorBuff));
+  delay(5000);
 }
