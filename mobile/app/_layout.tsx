@@ -33,6 +33,7 @@ export default function RootLayout() {
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="settings" options={{ headerShown: true, title: "Settings" }} />
+        <Stack.Screen name="device/[id]" options={{ headerShown: true, title: "Device" }} />
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="auto" />

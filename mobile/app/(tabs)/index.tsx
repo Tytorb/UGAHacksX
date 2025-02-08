@@ -1,56 +1,40 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import { Image, StyleSheet, Platform, Button, Text, View, Dimensions, Pressable } from 'react-native';
 
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import { FlashList } from "@shopify/flash-list";
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Stack } from 'expo-router';
+import { useRouter } from "expo-router";
+
+const MATEDATA = [
+  {
+    title: "My Name (item 1)",
+    hider: "User",
+    id: "0000001"
+  },
+  {
+    title: "My name (item 2)",
+    hider: "User that hid me",
+    id: "0000002"
+  },
+];
+
 
 export default function HomeScreen() {
+  
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Home</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12'
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    <SafeAreaView>
+            <ThemedView>
+              <ThemedText type="title">Index</ThemedText>
+            </ThemedView>
+=
+      <View style={{ height: 200, width: Dimensions.get("screen").width }}>
+          <MyList          />
+      </View>
+    </SafeAreaView>
   );
 }
 
@@ -72,3 +56,17 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
 });
+
+const MyList = () => {
+  const router = useRouter();
+  return (
+    <FlashList
+      data={MATEDATA}
+      renderItem={({ item }) =>{return (<Pressable onPress={() => router.push(`device/${item.id}`, { id: item.id })}>
+          <ThemedText type="subtitle">{item.title}</ThemedText>
+          <Text>{item.hider}</Text>
+          </Pressable>)}}
+      estimatedItemSize={200}
+    />
+  );
+};
