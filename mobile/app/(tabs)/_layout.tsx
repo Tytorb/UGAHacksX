@@ -1,4 +1,4 @@
-import { Tabs } from 'expo-router';
+import { Tabs, Stack } from 'expo-router';
 import React from 'react';
 import { Platform } from 'react-native';
 
@@ -47,7 +47,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="profile"
+        name="user/[id]"
         options={{
           tabBarIcon: ({ color }) => <Feather size={28} name="smile" color={color} />,
         }}
