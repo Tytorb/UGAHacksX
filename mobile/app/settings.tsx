@@ -1,52 +1,72 @@
-import { View, StyleSheet, ScrollView, Button, Alert, Text, Dimensions } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  ScrollView,
+  Button,
+  Alert,
+  Text,
+  Dimensions,
+} from 'react-native';
 import { Image } from 'expo-image';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { FlashList } from "@shopify/flash-list";
-import { Stack } from 'expo-router';
+import { FlashList } from '@shopify/flash-list';
+import { Stack, Slot } from 'expo-router';
+
+import Feather from '@expo/vector-icons/Feather';
+
+// Import your global CSS file
+import "../global.css";
 
 const DATA = [
   {
-    title: "First Item",
+    title: 'First Item',
   },
   {
-    title: "Second Item",
+    title: 'Second Item',
   },
 ];
 
 export default function Profile() {
   return (
-    <SafeAreaView style={{ backgroundColor: "#fff", height: "100%" }}>
+    <SafeAreaView style={{ backgroundColor: '#fff', height: '100%' }}>
       <ScrollView>
         <Stack.Screen options={{ headerBackTitle: 'Profile' }} />
-        <ThemedView>
-          <ThemedText type="title">Settings</ThemedText>
-        </ThemedView>
-        <View style={{width: Dimensions.get("screen").width }}>
-            <FlashList
-              data={DATA}
-              renderItem={({ item }) => <Text>{item.title}</Text>}
-              estimatedItemSize={200}
-            />
-        </View>
-        <ThemedView>
-          <ThemedText type="title">About</ThemedText>
-        </ThemedView>
-        <ThemedText style={{textAlign: "center", backgroundColor: "#fff"}} >©2025</ThemedText>
-        <ThemedText style={{textAlign: "center", backgroundColor: "#fff"}} >Created for UGAHacks X</ThemedText>
-        <Button
-            onPress={() => Alert.alert('our names')}
-            title="Credits"
-            color="#841584"
-            accessibilityLabel="Crdits"
-          />
 
+        <View className='p-4 gap-8'>
+          <View className='justify-left flex-row gap-2 content-center'>
+          <Feather size={32} name="smile" className="color-black self-center" />
+          <View className='justify-left flex-col'>
+            <Text className="text-black text-2xl font-bold">Profile</Text>
+            <Text className="text-gray-700 text-md">Name, Image, Bio</Text>
+          </View>
+          </View>
+          <View className='justify-left flex-row gap-2 content-center'>
+          <Feather size={32} name="smile" className="color-black self-center" />
+          <View className='justify-left flex-col'>
+            <Text className="text-black text-2xl font-bold">Privacy</Text>
+            <Text className="text-gray-700 text-md">Location, History</Text>
+          </View>
+          </View>
+
+        </View>
+
+        <ThemedText style={{ textAlign: 'center', backgroundColor: '#fff' }}>
+          ©2025
+        </ThemedText>
+        <ThemedText style={{ textAlign: 'center', backgroundColor: '#fff' }}>
+          Created for UGAHacks X
+        </ThemedText>
+        <Button
+          onPress={() => Alert.alert('our names')}
+          title="Credits"
+          color="#841584"
+          accessibilityLabel="Crdits"
+        />
       </ScrollView>
-    </SafeAreaView>      
-      
-    
+    </SafeAreaView>
   );
 }
 
