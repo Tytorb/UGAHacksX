@@ -1,3 +1,4 @@
+import { BLEconnection } from '@/components/BLEconnection';
 import { Stack, useLocalSearchParams } from 'expo-router';
 import { Text, View } from 'react-native';
 
@@ -10,6 +11,7 @@ export default function DevicePage() {
     <View>
       <Stack.Screen options={{ headerBackTitle: 'Explore' }} />
       <Text>Device ID: {id}</Text>
+      <BLEconnection />
       {/* You can use the 'id' to fetch device data or render specific content */}
     </View>
   );
