@@ -90,8 +90,8 @@ void setup() {
   };
 
   // Loads old hidder data
-  lastHider = readFile(LittleFS, "lastHider.txt");
-  lastHideDate = readFile(LittleFS, "lastHideDate.txt");
+  lastHider = readFile(LittleFS, "/lastHider.txt");
+  lastHideDate = readFile(LittleFS, "/lastHideDate.txt");
 
   BLEDevice::init("MateOnTour - Rocky");
   BLEServer *pServer = BLEDevice::createServer();
