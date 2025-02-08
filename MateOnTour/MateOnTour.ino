@@ -17,7 +17,6 @@ ESP32Time rtc(3600);  // offset in seconds GMT+1
 #define CLEAR_SENSOR_STORAGE false
 
 
-
 #define SERVICE_UUID "4fafc201-1fb5-459e-8fcc-c5c9c331914b"
 #define WRITE_HIDER_CHARACTERISTIC_UUID "beb5483e-36e1-4688-b7f5-ea07361b26a8"
 #define WRITE_HIDE_DATE_CHARACTERISTIC_UUID "489954f8-92c2-4449-b3d7-6ac3e41bcce8"
@@ -27,6 +26,9 @@ BLEUUID *WRITE_HIDE_DATE_UUID = new BLEUUID(WRITE_HIDE_DATE_CHARACTERISTIC_UUID)
 
 // Toggle To Send Sensor Data
 BLECharacteristic sendSensorDataToggle("0a036069-5526-4023-9b1a-3f1bb713bf68", BLECharacteristic::PROPERTY_WRITE);
+
+// Input To Set Time
+BLECharacteristic setTimeCharacteristic("331f29ef-4396-4a63-a012-496def467096", BLECharacteristic::PROPERTY_WRITE);
 
 // Temp Data
 BLECharacteristic sensorDataCharacteristic("f78ebbff-c8b7-4107-93de-889a6a06d408", BLECharacteristic::PROPERTY_NOTIFY);
@@ -40,7 +42,10 @@ bool deviceConnected = false;
 
 double tempF;
 
-char *sensorBuff = (char*)calloc(100, sizeof(char)); ;
+int sense_count = 0; 
+
+// 20 the the maximum size but we will do 40 and then yell if it goes over
+char *sensorBuff = (char*)calloc(40, sizeof(char));
 
 class MyServerCallbacks : public BLEServerCallbacks {
   void onConnect(BLEServer *pServer) {
@@ -52,9 +57,17 @@ class MyServerCallbacks : public BLEServerCallbacks {
   }
 };
 
+class SentTimeCallback : public BLECharacteristicCallbacks {
+  void onWrite(BLECharacteristic *pCharacteristic) {
+    unsigned long valueAsEpoch = strtoul(pCharacteristic->getValue().c_str(), NULL, 10);
+    Serial.println(valueAsEpoch);
+    rtc.setTime(valueAsEpoch);
+  }
+};
+
+
 void setup() {
   Serial.begin(115200);
-  rtc.setTime(30, 24, 15, 8, 2, 2024);  // 17th Jan 2021 15:24:30
 
   // Settng up recording files
   if (!LittleFS.begin(FORMAT_LITTLEFS_IF_FAILED)) {
@@ -124,6 +137,8 @@ void setup() {
   // Loads old hidder data
   lastHider = readFile(LittleFS, "/lastHider.txt");
   lastHideDate = readFile(LittleFS, "/lastHideDate.txt");
+  rtc.setTime(readTimeFile(LittleFS, "/lastTime.txt"));  // 17th Jan 2021 15:24:30
+
 
   BLEDevice::init("MateOnTour - Rocky");
   BLEServer *pServer = BLEDevice::createServer();
@@ -151,6 +166,10 @@ void setup() {
   pService->addCharacteristic(&sendSensorDataToggle);
   sendSensorDataToggle.setCallbacks(new SendSensorDataToggleCallback());
 
+  // add the setTimeCharacteristic
+  pService->addCharacteristic(&setTimeCharacteristic);
+  setTimeCharacteristic.setCallbacks(new SentTimeCallback());
+
   pService->start();
 
   BLEAdvertising *pAdvertising = pServer->getAdvertising();
@@ -168,6 +187,14 @@ void loop() {
   strcat(sensorBuff, ";");
   Serial.println(sensorBuff);
   appendFile(LittleFS, "/tempF.txt", sensorBuff);
+  for(int i = 0; i< 19; i++){
+    if(sensorBuff[21 + i] != 0) {
+      Serial.println("IMPENDING DATA LOSS FROM TOO LONG PACKET");
+    }
+  }
   memset(sensorBuff, '\0', sizeof(sensorBuff));
+  if (sense_count++ % 16 == 15) {
+    writeTimeFile(LittleFS, "/lastTime.txt", rtc.getEpoch());
+  }
   delay(5000);
 }
