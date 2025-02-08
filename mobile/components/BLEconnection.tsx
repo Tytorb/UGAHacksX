@@ -46,6 +46,7 @@ const requestBluetoothPermission = async () => {
 };
 
 function scanAndConnect(setScan: (arg0: string) => void) {
+    setScan("started scan")
     manager.startDeviceScan(null, null, (error, device) => {
         if (error) {
             // Handle error (scanning will be stopped automatically)
