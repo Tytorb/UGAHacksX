@@ -1,7 +1,5 @@
 import { Image, StyleSheet, Platform, Button, Text, View, Dimensions, Pressable } from 'react-native';
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { FlashList } from "@shopify/flash-list";

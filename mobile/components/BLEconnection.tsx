@@ -1,4 +1,5 @@
 import BLEManager from "react-native-ble-manager";
+import { ThemedText } from "./ThemedText";
 
 export function BLEconnection(props: {}) {
     BLEManager.start({ showAlert: false }).then(() => {
@@ -7,7 +8,7 @@ export function BLEconnection(props: {}) {
     });
   return (
     <>
-    <text>Connect to the found travelers</text>
+    <ThemedText>Connect to the found travelers</ThemedText>
     </>
 );
 }
