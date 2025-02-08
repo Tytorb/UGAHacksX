@@ -2,26 +2,29 @@
 #include <BLEUtils.h>
 #include <BLEServer.h>
 
-
 // littleFS Imports
 #include <Arduino.h>
 #include "FS.h"
 #include <LittleFS.h>
 #define FORMAT_LITTLEFS_IF_FAILED true
 
+#define CLEAR_SENSOR_STORAGE false
 
-// See the following for generating UUIDs:
-// https://www.uuidgenerator.net/
+
 
 #define SERVICE_UUID "4fafc201-1fb5-459e-8fcc-c5c9c331914b"
 #define WRITE_HIDER_CHARACTERISTIC_UUID "beb5483e-36e1-4688-b7f5-ea07361b26a8"
 #define WRITE_HIDE_DATE_CHARACTERISTIC_UUID "489954f8-92c2-4449-b3d7-6ac3e41bcce8"
 
 BLEUUID *WRITE_HIDER_UUID = new BLEUUID(WRITE_HIDER_CHARACTERISTIC_UUID);
+BLEUUID *WRITE_HIDE_DATE_UUID = new BLEUUID(WRITE_HIDE_DATE_CHARACTERISTIC_UUID);
+
+// Toggle To Send Sensor Data
+BLECharacteristic sendSensorDataToggle("0a036069-5526-4023-9b1a-3f1bb713bf68", BLECharacteristic::PROPERTY_WRITE);
 
 // Temp Data
-BLECharacteristic bmeTemperatureFahrenheitCharacteristics("f78ebbff-c8b7-4107-93de-889a6a06d408", BLECharacteristic::PROPERTY_NOTIFY);
-BLEDescriptor bmeTemperatureFahrenheitDescriptor(BLEUUID((uint16_t)0x2902));
+BLECharacteristic sensorDataCharacteristic("f78ebbff-c8b7-4107-93de-889a6a06d408", BLECharacteristic::PROPERTY_NOTIFY);
+BLEDescriptor sensorDataCharacteristicDescripter(BLEUUID((uint16_t)0x2902));
 
 #define maxStringLength 50
 String lastHider = "unset";
@@ -37,6 +40,7 @@ class MyServerCallbacks : public BLEServerCallbacks {
   };
   void onDisconnect(BLEServer *pServer) {
     deviceConnected = false;
+    pServer->startAdvertising();
   }
 };
 
@@ -48,10 +52,10 @@ void setup() {
     Serial.println("LittleFS Mount Failed");
     return;
   }
-  if (!doesFileExit(LittleFS, "/tempF.txt")) {
+  if (CLEAR_SENSOR_STORAGE || !doesFileExit(LittleFS, "/tempF.txt")) {
     Serial.println("Creating tempF file");
     writeFile(LittleFS, "/tempF.txt", "");
-  } else { 
+  } else {
     Serial.println("Found existing Tempf file");
   }
 
@@ -72,7 +76,7 @@ void setup() {
             lastHider = value;
             writeFile(LittleFS, "/lastHider.txt", value.c_str());
           }
-        } else {
+        } else if (pCharacteristic->getUUID().equals(*WRITE_HIDE_DATE_UUID)) {
           Serial.print("New HideDate: ");
           for (int i = 0; i < value.length(); i++) {
             Serial.print(value[i]);
@@ -89,6 +93,25 @@ void setup() {
     }
   };
 
+  class SendSensorDataToggleCallback : public BLECharacteristicCallbacks {
+    void onWrite(BLECharacteristic *pCharacteristic) {
+      String fileData = readFile(LittleFS, "/tempF.txt");
+      Serial.println(fileData);
+      char buff[20];
+      for (int i = 0; i < fileData.length(); i++) {
+        int buffIndex = 0;
+        while (i < fileData.length() && fileData.charAt(i) != ';' && buffIndex < 20) {
+          buff[buffIndex++] = fileData.charAt(i++);
+        }
+        //Set sensor characteristic value and notify connected client
+        sensorDataCharacteristic.setValue(buff);
+        sensorDataCharacteristic.notify();
+        delay(50);
+      }
+      writeFile(LittleFS, "/tempF.txt", "");
+    }
+  };
+
   // Loads old hidder data
   lastHider = readFile(LittleFS, "/lastHider.txt");
   lastHideDate = readFile(LittleFS, "/lastHideDate.txt");
@@ -97,6 +120,7 @@ void setup() {
   BLEServer *pServer = BLEDevice::createServer();
 
   BLEService *pService = pServer->createService(SERVICE_UUID);
+  pServer->setCallbacks(new MyServerCallbacks());
 
   SetValuesCallback *valuesCallback = new SetValuesCallback();
 
@@ -105,15 +129,18 @@ void setup() {
   pHiderCharacteristic->setCallbacks(valuesCallback);
   pHiderCharacteristic->setValue(lastHider);
 
-
   BLECharacteristic *pHideDateCharacteristic =
     pService->createCharacteristic(WRITE_HIDE_DATE_CHARACTERISTIC_UUID, BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_WRITE);
   pHideDateCharacteristic->setCallbacks(valuesCallback);
   pHiderCharacteristic->setValue(lastHideDate);
 
-  pService->addCharacteristic(&bmeTemperatureFahrenheitCharacteristics);
-  bmeTemperatureFahrenheitDescriptor.setValue("Temperature Fahrenheit");
-  bmeTemperatureFahrenheitCharacteristics.addDescriptor(&bmeTemperatureFahrenheitDescriptor);
+  pService->addCharacteristic(&sensorDataCharacteristic);
+  sensorDataCharacteristicDescripter.setValue("Toggle to recieve sensor data");
+  sensorDataCharacteristic.addDescriptor(&sensorDataCharacteristicDescripter);
+
+  // add the sendSensorDataToggle
+  pService->addCharacteristic(&sendSensorDataToggle);
+  sendSensorDataToggle.setCallbacks(new SendSensorDataToggleCallback());
 
   pService->start();
 
@@ -127,12 +154,9 @@ void loop() {
     tempF = random(500) / 10;
     static char temperatureFTemp[6];
     dtostrf(tempF, 6, 2, temperatureFTemp);
-    //Set temperature Characteristic value and notify connected client
-    bmeTemperatureFahrenheitCharacteristics.setValue(temperatureFTemp);
-    bmeTemperatureFahrenheitCharacteristics.notify();
-    Serial.print(tempF);
+    Serial.println(tempF);
     appendFile(LittleFS, "/tempF.txt", temperatureFTemp);
-    appendFile(LittleFS, "/tempF.txt", " ");
+    appendFile(LittleFS, "/tempF.txt", ";");
     delay(1000);
   }
 }
