@@ -1,36 +1,56 @@
-import { Image, StyleSheet, Platform, Button, Text, View, Dimensions, Pressable } from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  Platform,
+  Button,
+  Text,
+  View,
+  Dimensions,
+  Pressable,
+} from 'react-native';
 
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { FlashList } from "@shopify/flash-list";
+import { FlashList } from '@shopify/flash-list';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Stack } from 'expo-router';
-import { useRouter } from "expo-router";
+import { useRouter } from 'expo-router';
+
+import '../../global.css';
 
 const MATEDATA = [
   {
-    title: "My Name (item 1)",
-    hider: "User",
-    id: "0000001"
+    title: 'My Name (item 1)',
+    hider: 'User',
+    id: '0000001',
   },
   {
-    title: "My name (item 2)",
-    hider: "User that hid me",
-    id: "0000002"
+    title: 'My name (item 2)',
+    hider: 'User that hid me',
+    id: '0000002',
   },
+  {
+    title: 'My name (item 3)',
+    hider: 'User that hid me',
+    id: '0000003',
+  },
+  {
+    title: 'My name (item 4)',
+    hider: 'User that hid me',
+    id: '0000004',
+  },
+
 ];
 
-
 export default function HomeScreen() {
-  
   return (
-    <SafeAreaView>
-            <ThemedView>
-              <ThemedText type="title">Index</ThemedText>
-            </ThemedView>
-=
-      <View style={{ height: 200, width: Dimensions.get("screen").width }}>
-          <MyList          />
+    <SafeAreaView className='p-4'>
+      <View>
+        <Text className="text-black text-5xl">Explore</Text>
+      </View>
+
+      <View style={{ height: 200, width: Dimensions.get('screen').width }}>
+        <MyList />
       </View>
     </SafeAreaView>
   );
@@ -60,10 +80,16 @@ const MyList = () => {
   return (
     <FlashList
       data={MATEDATA}
-      renderItem={({ item }) =>{return (<Pressable onPress={() => router.push(`device/${item.id}`, { id: item.id })}>
-          <ThemedText type="subtitle">{item.title}</ThemedText>
-          <Text>{item.hider}</Text>
-          </Pressable>)}}
+      renderItem={({ item }) => {
+        return (
+          <Pressable
+            onPress={() => router.push(`device/${item.id}`, { id: item.id })}
+          >
+            <Text type="subtitle">{item.title}</Text>
+            <Text>{item.hider}</Text>
+          </Pressable>
+        );
+      }}
       estimatedItemSize={200}
     />
   );

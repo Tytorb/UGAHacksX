@@ -29,27 +29,33 @@ export default function TabLayout() {
             paddingTop: 10, // Adjust to balance spacing
             //backgroundColor: '#fff',
           },
-          
+
           default: {},
-          
         }),
-      }}>
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
-          tabBarIcon: ({ color }) => <Feather size={28} name="compass" color={color} />,
+          tabBarIcon: ({ color }) => (
+            <Feather size={28} name="compass" color={color} />
+          ),
         }}
       />
       <Tabs.Screen
         name="saves"
         options={{
-          tabBarIcon: ({ color }) => <Feather size={28} name="bookmark" color={color} />,
+          tabBarIcon: ({ color }) => (
+            <Feather size={28} name="bookmark" color={color} />
+          ),
         }}
       />
       <Tabs.Screen
         name="user/[id]"
         options={{
-          tabBarIcon: ({ color }) => <Feather size={28} name="smile" color={color} />,
+          tabBarIcon: ({ color }) => (
+            <Feather size={28} name="smile" color={color} />
+          ),
         }}
       />
     </Tabs>
