@@ -20,7 +20,7 @@ export default function Saves() {
         />
       }>
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Explore</ThemedText>
+        <ThemedText type="title">Saves</ThemedText>
       </ThemedView>
       <ThemedText>This app includes example code to help you get started.</ThemedText>
       <Collapsible title="File-based routing">
@@ -57,7 +57,7 @@ export default function Saves() {
       <Collapsible title="Custom fonts">
         <ThemedText>
           Open <ThemedText type="defaultSemiBold">app/_layout.tsx</ThemedText> to see how to load{' '}
-          <ThemedText style={{ fontFamily: 'SpaceMono' }}>
+          <ThemedText style={{ fontFamily: 'Inter' }}>
             custom fonts such as this one.
           </ThemedText>
         </ThemedText>
