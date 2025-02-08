@@ -14,34 +14,34 @@ export default function Profile() {
   const router = useRouter();
   return (
     <SafeAreaView style={{ backgroundColor: "#fff", height: "100%" }}>
-        <ParallaxScrollView style={{backgroundColor: "#fff", height: 100}}
-              headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
-              headerImage={
-                <IconSymbol
-                  size={310}
-                  color="#808080"
-                  name="chevron.left.forwardslash.chevron.right"
-                  style={styles.headerImage}
-                />
-              }>
-        >
+        <ScrollView>
             <ThemedView style={{flexDirection: 'row', justifyContent: 'space-between'}}>
               <ThemedText type="title"> </ThemedText>
+              <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
               <Feather.Button
                 onPress={() => router.push("settings")}
-                backgroundColor="#00000000"
+                backgroundColor="#fff"
+                color={"#000"}
+                accessibilityLabel="Open settings"
+                size={24}
+                name="edit"
+            />
+              <Feather.Button
+                onPress={() => router.push("settings")}
+                backgroundColor="#fff"
                 color={"#000"}
                 accessibilityLabel="Open settings"
                 size={24}
                 name="settings"
             />
+            </View>
             </ThemedView>
 
             <ThemedView style={{flexDirection: 'column', justifyContent: 'center', alignContent: 'center', alignItems: 'center'}}>
 
             <Feather.Button
                 onPress={() => router.push("doesntexist")}
-                backgroundColor="#00000000"
+                backgroundColor="#fff"
                 color={"#000"}
                 accessibilityLabel="Open settings"
                 size={64}
@@ -51,7 +51,7 @@ export default function Profile() {
                 <ThemedText type="title">John Doe</ThemedText>
                 </ThemedView>
             </ThemedView>
-        </ParallaxScrollView>
+        </ScrollView>
 
     
     </SafeAreaView>      

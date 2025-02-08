@@ -19,29 +19,32 @@ const DATA = [
 
 export default function Profile() {
   return (
-    <SafeAreaView>
-            <Stack.Screen options={{ headerBackTitle: 'Profile' }} />
-            <ThemedView>
-              <ThemedText type="title">Settings</ThemedText>
-            </ThemedView>
-            
-            <ThemedView>
-              <ThemedText type="title">About</ThemedText>
-            </ThemedView>
-            <Button
-                onPress={() => Alert.alert('Button with adjusted color pressed')}
-                title="Learn More"
-                color="#841584"
-                accessibilityLabel="Learn more about this purple button"
-              />
-
-      <View style={{ height: 200, width: Dimensions.get("screen").width }}>
-          <FlashList
-            data={DATA}
-            renderItem={({ item }) => <Text>{item.title}</Text>}
-            estimatedItemSize={200}
+    <SafeAreaView style={{ backgroundColor: "#fff", height: "100%" }}>
+      <ScrollView>
+        <Stack.Screen options={{ headerBackTitle: 'Profile' }} />
+        <ThemedView>
+          <ThemedText type="title">Settings</ThemedText>
+        </ThemedView>
+        <View style={{width: Dimensions.get("screen").width }}>
+            <FlashList
+              data={DATA}
+              renderItem={({ item }) => <Text>{item.title}</Text>}
+              estimatedItemSize={200}
+            />
+        </View>
+        <ThemedView>
+          <ThemedText type="title">About</ThemedText>
+        </ThemedView>
+        <ThemedText style={{textAlign: "center", backgroundColor: "#fff"}} >©2025</ThemedText>
+        <ThemedText style={{textAlign: "center", backgroundColor: "#fff"}} >Created for UGAHacks X</ThemedText>
+        <Button
+            onPress={() => Alert.alert('our names')}
+            title="Credits"
+            color="#841584"
+            accessibilityLabel="Crdits"
           />
-      </View>
+
+      </ScrollView>
     </SafeAreaView>      
       
     
