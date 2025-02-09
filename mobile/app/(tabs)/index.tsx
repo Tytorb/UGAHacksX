@@ -7,6 +7,7 @@ import {
   View,
   Dimensions,
   Pressable,
+  ScrollView,
 } from 'react-native';
 
 import { ThemedText } from '@/components/ThemedText';
@@ -16,27 +17,46 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Stack } from 'expo-router';
 import { useRouter } from 'expo-router';
 
+import DeviceCard from '../../components/DeviceCard'; // Import the DeviceCard component
+
+
 import '../../global.css';
 
 const MATEDATA = [
   {
-    title: 'My Name (item 1)',
-    hider: 'User',
+    name: 'My Name (item 1)',
+    hider: 'Theo',
+    area: 'Athens, GA',
+    origin: 'New York City, NY',
+    goal: 'San Jose, CA',
+    clue: 'Look under a rock by the river...',
     id: '0000001',
   },
   {
-    title: 'My name (item 2)',
-    hider: 'User that hid me',
+    name: 'My Name (item 2)',
+    hider: 'Theo',
+    area: 'Athens, GA',
+    origin: 'New York City, NY',
+    goal: 'San Jose, CA',
+    clue: 'Look under a rock by the river...',
     id: '0000002',
   },
   {
-    title: 'My name (item 3)',
-    hider: 'User that hid me',
+    name: 'My Name (item 3)',
+    hider: 'Theo',
+    area: 'Ontario, CA',
+    origin: 'Omaha, NE',
+    goal: 'Panama City, FL',
+    clue: 'Look under a rock by the river...',
     id: '0000003',
   },
   {
-    title: 'My name (item 4)',
-    hider: 'User that hid me',
+    name: 'My Name (item 4)',
+    hider: 'Theo',
+    area: 'Athens, GA',
+    origin: 'New York City, NY',
+    goal: 'San Jose, CA',
+    clue: 'Look under a rock by the river...',
     id: '0000004',
   },
 
@@ -44,14 +64,16 @@ const MATEDATA = [
 
 export default function HomeScreen() {
   return (
-    <SafeAreaView className='p-4'>
+    <SafeAreaView className='bg-white'>
+      <ScrollView className='p-8'>
       <View>
-        <Text className="text-black text-5xl">Explore</Text>
+        <Text className="text-black text-5xl font-medium">Explore</Text>
       </View>
 
-      <View style={{ height: 200, width: Dimensions.get('screen').width }}>
+      <View className='w-full h-full'>
         <MyList />
       </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -79,15 +101,22 @@ const MyList = () => {
   const router = useRouter();
   return (
     <FlashList
+      className='mt-4'
       data={MATEDATA}
       renderItem={({ item }) => {
         return (
-          <Pressable
-            onPress={() => router.push(`device/${item.id}`, { id: item.id })}
-          >
-            <Text type="subtitle">{item.title}</Text>
-            <Text>{item.hider}</Text>
-          </Pressable>
+          <View className='mb-4'>
+            <DeviceCard
+            name={item.name}
+            clue={item.clue}
+            hider={item.hider}
+            origin={item.origin}
+            area={item.area}
+            goal={item.goal}
+            id={item.id}
+          />
+
+          </View>
         );
       }}
       estimatedItemSize={200}

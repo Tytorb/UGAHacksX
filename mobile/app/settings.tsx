@@ -6,6 +6,7 @@ import {
   Alert,
   Text,
   Dimensions,
+  Pressable,
 } from 'react-native';
 import { Image } from 'expo-image';
 import { ThemedText } from '@/components/ThemedText';
@@ -53,18 +54,20 @@ export default function Profile() {
 
         </View>
 
-        <ThemedText style={{ textAlign: 'center', backgroundColor: '#fff' }}>
-          ©2025
-        </ThemedText>
-        <ThemedText style={{ textAlign: 'center', backgroundColor: '#fff' }}>
-          Created for UGAHacks X
-        </ThemedText>
-        <Button
-          onPress={() => Alert.alert('our names')}
-          title="Credits"
-          color="#841584"
-          accessibilityLabel="Crdits"
-        />
+        <View className='flex-col justify-center items-center gap-1'>
+          <Text className='text-lg'>
+            ©2025
+          </Text>
+          <Text className='text-lg'>
+            Created for UGAHacks X
+          </Text>
+          <Pressable
+            onPress={() => Alert.alert('our names')}
+            accessibilityLabel="Credits"
+          >
+            <Text className='text-lg color-blue-600 underline'>Credits</Text>
+          </Pressable>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
