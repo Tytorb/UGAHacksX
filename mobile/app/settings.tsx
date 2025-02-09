@@ -40,7 +40,7 @@ export default function Profile() {
         <ListItem icon="unlock" title="Account Center" subheading="Sign up, log in, log out" goto='saves' />
         <ListItem icon="eye" title="Privacy" subheading="Profile visiblity, history" goto='saves' />
         <ListItem icon="users" title="Friends" subheading="Add and remove friends" goto='saves' />
-        <ListItem icon="info" title="About" subheading="About MateOnTour" goto='saves' />
+        <ListItem icon="info" title="About" subheading="About Rock'n Riddles" goto='saves' />
 
         <View className='flex-col justify-center items-center gap-1 mt-16'>
           <Text className='text-lg'>
