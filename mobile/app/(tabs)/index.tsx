@@ -93,7 +93,7 @@ export default function HomeScreen() {
 
   return !loggedIn ? (
     <View style={styles.container}>
-      {!loggedIn && <Text>You are not logged in</Text>}
+      {!loggedIn && <Text className='text-2xl'>Please log in</Text>}
       {error && <Text>{error.message}</Text>}
 
       <Button
