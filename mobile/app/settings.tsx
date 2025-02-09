@@ -16,23 +16,33 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { FlashList } from '@shopify/flash-list';
 import { Stack, Slot } from 'expo-router';
 
+import { Auth0Provider, useAuth0 } from 'react-native-auth0';
+
 import Feather from '@expo/vector-icons/Feather';
 
 // Import your global CSS file
 import "../global.css";
 import ListItem from '@/components/ListItem';
 
-const DATA = [
-  {
-    title: 'First Item',
-  },
-  {
-    title: 'Second Item',
-  },
-];
+export default function Settings() {
+  const { clearSession } = useAuth0();
 
-export default function Profile() {
+  const onLogout = async () => {
+    try {
+      await clearSession();
+      Alert.alert('Logged out', 'You have been logged out successfully.');
+    } catch (e) {
+      console.log('Log out cancelled', e);
+      Alert.alert('Error', 'Log out cancelled.');
+    }
+  };
+
+
   return (
+    <Auth0Provider
+    domain="YOUR_AUTH0_DOMAIN"
+    clientId="YOUR_AUTH0_CLIENT_ID"
+  >
     <SafeAreaView className='bg-white h-full'>
       <ScrollView className='flex-col p-8 pt-0'>
         <ListItem icon="smile" title="Edit Profile" subheading="Username, icon, bio" goto='saves' />
@@ -56,33 +66,19 @@ export default function Profile() {
             <Text className='text-lg color-blue-600 underline'>Credits</Text>
           </Pressable>
         </View>
+
+
+        <View className='flex-col justify-center items-center gap-1 mt-16'>
+          <Button
+            onPress={onLogout}
+            title="Log Out"
+            color="#841584"
+            accessibilityLabel="Log Out"
+          />
+        </View>
+
       </ScrollView>
     </SafeAreaView>
+    </Auth0Provider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#25292e',
-    alignItems: 'center',
-  },
-  imageContainer: {
-    flex: 1,
-  },
-  image: {
-    width: 320,
-    height: 440,
-    borderRadius: 18,
-  },
-});
-
-const MyList = () => {
-  return (
-    <FlashList
-      data={DATA}
-      renderItem={({ item }) => <Text>{item.title}</Text>}
-      estimatedItemSize={200}
-    />
-  );
-};

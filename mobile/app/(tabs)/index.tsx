@@ -25,16 +25,16 @@ import '../../global.css';
 
 const MATEDATA = [
   {
-    name: 'My Name (item 1)',
-    hider: 'Theo',
+    name: 'The Rolling Clues',
+    hider: 'Owen',
     area: 'Athens, GA',
     origin: 'New York City, NY',
     goal: 'San Jose, CA',
-    clue: 'Look under a rock by the river...',
+    clue: 'At the coolest event in athens, by a table with a sign...',
     id: '0000001',
   },
   {
-    name: 'My Name (item 2)',
+    name: 'Clue Zepplin',
     hider: 'Theo',
     area: 'Athens, GA',
     origin: 'New York City, NY',
@@ -93,7 +93,7 @@ export default function HomeScreen() {
 
   return !loggedIn ? (
     <View style={styles.container}>
-      {!loggedIn && <Text>You are not logged in</Text>}
+      {!loggedIn && <Text className='text-2xl'>Please log in</Text>}
       {error && <Text>{error.message}</Text>}
 
       <Button

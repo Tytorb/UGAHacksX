@@ -59,7 +59,7 @@ function scanAndConnect(message: (arg0: any) => void, scanD: () => void) {
             date.setUTCSeconds(parseInt(data[0]));
             message(
               'sensorData: ' +
-                date.getTime() +
+                date.toLocaleTimeString() +
                 ' ' +
                 data[1] +
                 'F ' +
