@@ -20,6 +20,7 @@ import Feather from '@expo/vector-icons/Feather';
 
 // Import your global CSS file
 import "../global.css";
+import ListItem from '@/components/ListItem';
 
 const DATA = [
   {
@@ -33,28 +34,12 @@ const DATA = [
 export default function Profile() {
   return (
     <SafeAreaView style={{ backgroundColor: '#fff', height: '100%' }}>
-      <ScrollView>
-        <Stack.Screen options={{ headerBackTitle: 'Profile' }} />
+      <ScrollView className='flex-col p-8 pt-0'>
+        <ListItem icon="user" title="Sign In" subheading="Sign into your account" goto='saves' />
+        <ListItem icon="user" title="Sign In" subheading="Sign into your account" goto='saves' />
+        <ListItem icon="user" title="Sign In" subheading="Sign into your account" goto='saves' />
 
-        <View className='p-4 gap-8'>
-          <View className='justify-left flex-row gap-2 content-center'>
-          <Feather size={32} name="smile" className="color-black self-center" />
-          <View className='justify-left flex-col'>
-            <Text className="text-black text-2xl font-bold">Profile</Text>
-            <Text className="text-gray-700 text-md">Name, Image, Bio</Text>
-          </View>
-          </View>
-          <View className='justify-left flex-row gap-2 content-center'>
-          <Feather size={32} name="smile" className="color-black self-center" />
-          <View className='justify-left flex-col'>
-            <Text className="text-black text-2xl font-bold">Privacy</Text>
-            <Text className="text-gray-700 text-md">Location, History</Text>
-          </View>
-          </View>
-
-        </View>
-
-        <View className='flex-col justify-center items-center gap-1'>
+        <View className='flex-col justify-center items-center gap-1 mt-16'>
           <Text className='text-lg'>
             ©2025
           </Text>
