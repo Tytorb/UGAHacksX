@@ -8,41 +8,11 @@ import TabBarBackground from '@/components/ui/TabBarBackground';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import Feather from '@expo/vector-icons/Feather';
-import { Auth0Provider, useAuth0 } from 'react-native-auth0';
+import { useAuth0 } from 'react-native-auth0';
 
-function TabLayout() {
-  const colorScheme = useColorScheme();
-  const { authorize, clearSession, user, error, isLoading } = useAuth0();
-
-  const onLogin = async () => {
-    try {
-      await authorize();
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  const onLogout = async () => {
-    try {
-      await clearSession();
-    } catch (e) {
-      console.log('Log out cancelled');
-    }
-  };
-
-  const loggedIn = user !== undefined && user !== null;
-
-  return !loggedIn ? (
-    <View style={styles.container}>
-      {!loggedIn && <Text>You are not logged in</Text>}
-      {error && <Text>{error.message}</Text>}
-
-      <Button
-        onPress={loggedIn ? onLogout : onLogin}
-        title={loggedIn ? 'Log Out' : 'Log In'}
-      />
-    </View>
-  ) : (
+export default function TabLayout() {
+  const { user } = useAuth0();
+  return (
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: '#000000',
@@ -96,23 +66,3 @@ function TabLayout() {
     </Tabs>
   );
 }
-
-export default function App() {
-  return (
-    <Auth0Provider
-      domain="dev-ekqy8oookh1isaek.us.auth0.com"
-      clientId="KZeg9aWZuZUebf73q9nFOKfVmtuyI1iG"
-    >
-      <TabLayout />
-    </Auth0Provider>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-});
