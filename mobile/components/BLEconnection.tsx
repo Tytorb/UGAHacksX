@@ -1,4 +1,4 @@
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { Pressable, ScrollView, Text, View, StyleSheet } from 'react-native';
 import { ThemedText } from './ThemedText';
 import { useEffect, useRef, useState } from 'react';
 import { manager } from '@/hooks/manager';
@@ -88,7 +88,7 @@ function scanAndConnect(message: (arg0: any) => void, scanD: () => void) {
 export function BLEconnection(props: {}) {
   const [scanCount, setScanCount] = useState(0);
   const [messages, setMessages] = useState<any[]>([]);
-  const [foundDevice, setFoundDevice] = useState(false);
+  const [foundDevice, setFoundDevice] = useState(true);
 
   requestBluetoothPermission();
 
@@ -116,17 +116,17 @@ export function BLEconnection(props: {}) {
           Scanned {scanCount} devices
         </Text>
 
-        <ScrollView className='h-20 bg-gray-100 rounded-lg pt-2 mb-4'>
+        <ScrollView className='h-20 bg-gray-100 rounded-xl pt-2 mb-4 font-italic'>
             {messages.map((message, key) => {
-              return <Text key={key}>{JSON.stringify(message)}</Text>;
+              return <Text key={key} style={styles.monospaceText}>{JSON.stringify(message)}</Text>;
             })}
         </ScrollView>
 
         <Pressable
           className={
             foundDevice
-              ? 'flex-col gap-0 p-3 rounded-lg items-center justify-center bg-blue-600'
-              : 'flex-col gap-0 p-3 rounded-lg items-center justify-center bg-blue-100'
+              ? 'flex-col gap-0 p-3 rounded-xl items-center justify-center bg-blue-600'
+              : 'flex-col gap-0 p-3 rounded-xl items-center justify-center bg-blue-100'
           }
           onPress={() => router.push('/setdata')}
           accessibilityLabel="Create this Rock'n Riddle's Next Location"
@@ -152,3 +152,9 @@ export function BLEconnection(props: {}) {
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  monospaceText: {
+    fontFamily: 'monospace', // Use the monospace font family
+  },
+});
