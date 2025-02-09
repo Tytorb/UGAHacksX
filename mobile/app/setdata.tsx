@@ -38,8 +38,8 @@ function setdata(props: {}) {
   return (
     <>
       <ThemedText>
-        It's time to leave your mark Help this MateOnTour! continue his journey
-        by hidding him somewhere cool.
+        It's time to leave your mark help this band continue thier tour around the country
+        by hidding them somewhere cool.
       </ThemedText>
       <View className='m-8 items-center justify-center align-center bg-white'>
       <TextInput className='m-4 text-xl bg-gray-100 rounded-full p-4'

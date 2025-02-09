@@ -149,7 +149,7 @@ void setup() {
   rtc.setTime(readTimeFile(LittleFS, "/lastTime.txt"));  // 17th Jan 2021 15:24:30
 
 
-  BLEDevice::init("MateOnTour - Tony Tone");
+  BLEDevice::init("Rock'nRiddles - The Rolling Clues");
   BLEServer *pServer = BLEDevice::createServer();
 
   BLEService *pService = pServer->createService(BLEUUID(SERVICE_UUID), 25);
