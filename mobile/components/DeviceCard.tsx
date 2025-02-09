@@ -5,8 +5,8 @@ import { router, Router } from 'expo-router';
 
 const DeviceCard = ({ name, clue, area, hider, goal, origin, id }) => {
   return (
-    <Pressable className='flex-col gap-0' onPress={() => router.push(`device/${id}`, { id: id })}>
-        <View className='bg-green-300 h-56 mb-2 rounded-xl'><Text>photo</Text></View>
+    <Pressable className='flex-col gap-0 mb-4' onPress={() => router.push(`device/${id}`, { id: id })}>
+        <View className='bg-green-300 h-56 mb-2 rounded-2xl'><Text>photo</Text></View>
         <View className='flex-row justify-between'>
       <Text className='text-lg font-medium'>{name}</Text>
         </View>
