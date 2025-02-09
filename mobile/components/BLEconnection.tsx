@@ -1,79 +1,106 @@
-import { PermissionsAndroid, Platform } from "react-native";
-import { ThemedText } from "./ThemedText";
-import { useEffect, useState } from "react";
-import { manager } from "@/hooks/manager";
+import { PermissionsAndroid, Platform, Text, View } from 'react-native';
+import { ThemedText } from './ThemedText';
+import { useEffect, useRef, useState } from 'react';
+import { manager } from '@/hooks/manager';
+import { BleError, Characteristic } from 'react-native-ble-plx';
+import { requestBluetoothPermission } from '@/hooks/requestPerms';
 
-const requestBluetoothPermission = async () => {
-    if (Platform.OS === "ios") {
-        return true;
-    }
-    if (
-        Platform.OS === "android" &&
-        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
-    ) {
-        const apiLevel = parseInt(Platform.Version.toString(), 10);
+function scanAndConnect(
+  message: (arg0: any) => void,
+  scanD: () => void,
+) {
+  message('searcing for device');
 
-        if (apiLevel < 31) {
-            const granted = await PermissionsAndroid.request(
-                PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
-            );
-            return granted === PermissionsAndroid.RESULTS.GRANTED;
-        }
-        if (
-            PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN &&
-            PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT
-        ) {
-            const result = await PermissionsAndroid.requestMultiple([
-                PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN,
-                PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT,
-                PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-            ]);
-
-            return (
-                result["android.permission.BLUETOOTH_CONNECT"] ===
-                    PermissionsAndroid.RESULTS.GRANTED &&
-                result["android.permission.BLUETOOTH_SCAN"] ===
-                    PermissionsAndroid.RESULTS.GRANTED &&
-                result["android.permission.ACCESS_FINE_LOCATION"] ===
-                    PermissionsAndroid.RESULTS.GRANTED
-            );
-        }
+  manager.startDeviceScan(null, null, async (error, device) => {
+    scanD();
+    if (error || !device) {
+      // Handle error (scanning will be stopped automatically)
+      return;
     }
 
-    alert("Permission have not been granted");
+    // Check if it is a device you are looking for based on advertisement data
+    // or other criteria.
+    if (device.name?.startsWith('MateOnTour')) {
+      // Stop scanning as it's not necessary if you are scanning for one device.
+      manager.stopDeviceScan();
+      message('Device Found');
 
-  return false;
-};
+      // Proceed with connection.
 
-function scanAndConnect(setScan: (arg0: string) => void) {
-    setScan("started scan")
-    manager.startDeviceScan(null, null, (error, device) => {
-        if (error) {
-            // Handle error (scanning will be stopped automatically)
+      const connectedDevice = await device.connect();
+
+      const deviceServicesAndChar =
+        await connectedDevice.discoverAllServicesAndCharacteristics();
+      message(JSON.stringify(deviceServicesAndChar));
+
+      const lastHider = await deviceServicesAndChar.readCharacteristicForService(
+        '4fafc201-1fb5-459e-8fcc-c5c9c331914b',
+        'beb5483e-36e1-4688-b7f5-ea07361b26a8'
+      );
+      message("Last Hider: " + atob(lastHider.value!));
+      
+      const lastDayHidden = await deviceServicesAndChar.readCharacteristicForService(
+        '4fafc201-1fb5-459e-8fcc-c5c9c331914b',
+        '489954f8-92c2-4449-b3d7-6ac3e41bcce8'
+      );
+      message("Last Hidden: " + atob(lastDayHidden.value!));
+
+      const moniter = await deviceServicesAndChar.monitorCharacteristicForService(
+        '4fafc201-1fb5-459e-8fcc-c5c9c331914b',
+        'f78ebbff-c8b7-4107-93de-889a6a06d408',
+        (error: BleError | null, characteristic: Characteristic | null) => {
+          if(error !== null || characteristic === null) {
             return;
+          }
+          message("sensorData: "+ atob(characteristic.value!));
         }
+      )
 
-        // Check if it is a device you are looking for based on advertisement data
-        // or other criteria.
-        if (device?.name?.startsWith("MateOnTour")) {
-            // Stop scanning as it's not necessary if you are scanning for one device.
-            manager.stopDeviceScan();
-            // Proceed with connection.
-            setScan(JSON.stringify(device));
-        }
-    });
+      await deviceServicesAndChar.writeCharacteristicWithoutResponseForService(
+        '4fafc201-1fb5-459e-8fcc-c5c9c331914b',
+        "0a036069-5526-4023-9b1a-3f1bb713bf68",
+        "24"
+      )
+
+
+      await deviceServicesAndChar.writeCharacteristicWithoutResponseForService(
+        '4fafc201-1fb5-459e-8fcc-c5c9c331914b',
+        "331f29ef-4396-4a63-a012-496def467096",
+        btoa((Math.floor(Date.now() / 1000)).toString())
+      )
+      message("Travler's interal clock was synced");
+    }
+  });
 }
 
 export function BLEconnection(props: {}) {
-    const [scanState, setScanState] = useState("scan not started");
+  const [scanCount, setScanCount] = useState(0);
+  const [messages, setMessages] = useState<any[]>([]);
 
   requestBluetoothPermission();
 
-    scanAndConnect((str)=> setScanState(str));
-    return (
-        <>
-            <ThemedText>Connect to the found travelers</ThemedText>
-            <ThemedText>{scanState}</ThemedText>
-        </>
+  const addMessage = async (message: any | null) => {
+    if (message === null) return;
+    setMessages((prev) => [...prev, message]);
+  };
+
+  useEffect(() => {
+    manager.stopDeviceScan();
+    scanAndConnect(
+      addMessage,
+      () => setScanCount((prev) => prev + 1),
     );
+  }, [setScanCount]);
+
+  return (
+    <>
+      <ThemedText>Connect to the MateOnTour</ThemedText>
+      <ThemedText>Scanned {scanCount} devices</ThemedText>
+      <View>
+        {messages.map((message, key) => {
+          return <Text key={key}>{JSON.stringify(message)}</Text>;
+        })}
+      </View>
+    </>
+  );
 }

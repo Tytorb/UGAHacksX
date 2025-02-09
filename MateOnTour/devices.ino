@@ -112,7 +112,7 @@ float readThermistorTemperature(String hiddenByu, String lastHiddenu) {
   display.clearDisplay();
   display.setTextSize(2);
   display.setTextColor(SSD1306_WHITE);
-  display.setCursor(5, 5);
+  display.setCursor(0, 5);
   display.print("Temp: ");
   display.print(temperatureFahrenheit, 0);
   display.print("F Hider:");

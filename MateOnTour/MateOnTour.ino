@@ -125,12 +125,13 @@ void setup() {
     void onWrite(BLECharacteristic *pCharacteristic) {
       String fileData = readFile(LittleFS, "/tempF.txt");
       Serial.println(fileData);
-      char buff[20];
+      char buff[21];
       for (int i = 0; i < fileData.length(); i++) {
         int buffIndex = 0;
-        while (i < fileData.length() && fileData.charAt(i) != ';' && buffIndex < 20) {
+        while (i < fileData.length() && fileData.charAt(i) != ';' && fileData.charAt(i) != 0 && buffIndex < 20) {
           buff[buffIndex++] = fileData.charAt(i++);
         }
+        buff[buffIndex] = 0;
         //Set sensor characteristic value and notify connected client
         sensorDataCharacteristic.setValue(buff);
         sensorDataCharacteristic.notify();
@@ -162,7 +163,7 @@ void setup() {
   BLECharacteristic *pHideDateCharacteristic =
     pService->createCharacteristic(WRITE_HIDE_DATE_CHARACTERISTIC_UUID, BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_WRITE);
   pHideDateCharacteristic->setCallbacks(valuesCallback);
-  pHiderCharacteristic->setValue(lastHideDate);
+  pHideDateCharacteristic->setValue(lastHideDate);
 
   pService->addCharacteristic(&sensorDataCharacteristic);
   sensorDataCharacteristicDescripter.setValue("Toggle to recieve sensor data");
