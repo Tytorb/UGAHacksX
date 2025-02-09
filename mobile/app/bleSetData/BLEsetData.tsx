@@ -25,7 +25,7 @@ function scanAndConnect(setScan: (arg0: string) => void) {
   });
 }
 
-export function BLEsetData(props: {}) {
+function BLEsetData(props: {}) {
   const [scanState, setScanState] = useState('scan not started');
   const [textName, onChangeTextName] = React.useState('');
 
@@ -60,3 +60,5 @@ export function BLEsetData(props: {}) {
     </>
   );
 }
+
+export default BLEsetData;
