@@ -19,7 +19,7 @@ function scanAndConnect(message: (arg0: any) => void, scanD: () => void) {
 
     // Check if it is a device you are looking for based on advertisement data
     // or other criteria.
-    if (device.name?.startsWith('Rock\'nRiddles')) {
+    if (device.name?.startsWith("Rock'nRiddles")) {
       // Stop scanning as it's not necessary if you are scanning for one device.
       manager.stopDeviceScan();
       message('Device Found');
@@ -59,7 +59,7 @@ function scanAndConnect(message: (arg0: any) => void, scanD: () => void) {
             date.setUTCSeconds(parseInt(data[0]));
             message(
               'sensorData: ' +
-                date.getTime() +
+                date.toLocaleTimeString() +
                 ' ' +
                 data[1] +
                 'F ' +

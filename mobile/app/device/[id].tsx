@@ -1,7 +1,7 @@
 import { BLEconnection } from '@/components/BLEconnection';
 import { Stack, useLocalSearchParams, Link } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { Text, View, ScrollView } from 'react-native';
+import { Text, ScrollView } from 'react-native';
 import { useAuth0 } from 'react-native-auth0';
 
 export default function DevicePage() {
@@ -18,8 +18,7 @@ export default function DevicePage() {
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
-            authorization:
-              'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiIyNzU3OTBkYi1hOWE1LTRiMzMtYjUxYS1lM2M2NjBjYmQzZjYiLCJlbWFpbCI6InR5dG9yYkBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwicGluX3BvbGljeSI6eyJyZWdpb25zIjpbeyJkZXNpcmVkUmVwbGljYXRpb25Db3VudCI6MSwiaWQiOiJGUkExIn0seyJkZXNpcmVkUmVwbGljYXRpb25Db3VudCI6MSwiaWQiOiJOWUMxIn1dLCJ2ZXJzaW9uIjoxfSwibWZhX2VuYWJsZWQiOmZhbHNlLCJzdGF0dXMiOiJBQ1RJVkUifSwiYXV0aGVudGljYXRpb25UeXBlIjoic2NvcGVkS2V5Iiwic2NvcGVkS2V5S2V5IjoiNmEzZTRiYWUwZjEzZTE3NWRiYWIiLCJzY29wZWRLZXlTZWNyZXQiOiI0ZWM3NTE0ZjU2MTk5Nzk1MmM3ZDQxNGNjYjFhMTk1MTQwNmNhMzBiZDZhODQwYzlkYzUyZDVjNTM1YmRhMzM5IiwiZXhwIjoxNzcwNTMyNDY2fQ.-n7DEPRkfOB5EtQ5eLjwjzPdrqE2HwTe7-EgqhDLaMU',
+            authorization: `Bearer ${process.env.JWT}`,
           },
         }
       );
@@ -35,8 +34,8 @@ export default function DevicePage() {
   }, []);
 
   useEffect(() => {
-    console.error(user, 'here');
-  }, [user]);
+    console.error(data, 'here');
+  }, [data]);
 
   // Render the component based on the 'id'
   return (
@@ -47,7 +46,7 @@ export default function DevicePage() {
         </Text>
       </Link>
       <Stack.Screen options={{ headerBackTitle: 'Explore' }} />
-      <Text>Device ID: {user?.name}</Text>
+      <Text>Device ID: {id}</Text>
       <BLEconnection />
       {/* You can use the 'id' to fetch device data or render specific content */}
     </ScrollView>
