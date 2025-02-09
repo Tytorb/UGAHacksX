@@ -53,7 +53,7 @@ function setdata(props: {}) {
       <TextInput className='m-4 text-xl bg-gray-100 rounded-full p-4'
         style={{ padding: 16 }}
         value={user?.name}
-        editable={false}
+        editable={true}
       />
       <TextInput className='m-4 text-xl bg-gray-100 rounded-full p-4'
         style={{ padding: 16 }}
