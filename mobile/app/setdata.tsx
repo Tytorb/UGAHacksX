@@ -32,7 +32,7 @@ async function saveDataToEsp(dayHidden: string, hiderName: string) {
 
 function setdata(props: {}) {
   const {user} = useAuth0();
-  const [textName, onChangeTextName] = useState(user?.name);
+  const [textClue, onTextClueChange] = useState("");
 
   requestBluetoothPermission();
   return (
@@ -44,13 +44,13 @@ function setdata(props: {}) {
       <View className='m-8 items-center justify-center align-center bg-white'>
       <TextInput className='m-4 text-xl bg-gray-100 rounded-full p-4'
         style={{ padding: 16 }}
-        onChangeText={onChangeTextName}
-        value={textName}
+        value={user?.name}
+        editable={false}
       />
       <TextInput className='m-4 text-xl bg-gray-100 rounded-full p-4'
         style={{ padding: 16 }}
-        onChangeText={onChangeTextName}
-        value={textName}
+        onChangeText={(e) => onTextClueChange(e)}
+        value={textClue}
         placeholder="Your clue"
       />
       </View>
