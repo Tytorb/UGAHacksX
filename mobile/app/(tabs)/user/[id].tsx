@@ -49,13 +49,14 @@ export default function Profile() {
           }}
         >
           <Image
+            className='rounded-full'
             source={{
               uri: user?.picture,
             }}
-            style={{ width: 50, height: 50 }} // Add explicit dimensions
+            style={{ width: 128, height: 128, borderRadius: 999 }}
           />
           <ThemedView>
-            <ThemedText type="title">{user?.name}</ThemedText>
+            <ThemedText className='pt-4' type="title">{user?.name}</ThemedText>
           </ThemedView>
         </ThemedView>
       </ScrollView>

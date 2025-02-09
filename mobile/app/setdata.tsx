@@ -3,7 +3,6 @@ import { ThemedText } from '../components/ThemedText';
 import { useEffect, useState } from 'react';
 import { manager } from '@/hooks/manager';
 import { requestBluetoothPermission } from '@/hooks/requestPerms';
-import React from 'react';
 import { useAuth0 } from 'react-native-auth0';
 
 async function saveDataToEsp(dayHidden: string, hiderName: string) {
@@ -33,24 +32,28 @@ async function saveDataToEsp(dayHidden: string, hiderName: string) {
 
 function setdata(props: {}) {
   const {user} = useAuth0();
-  const [textName, onChangeTextName] = React.useState(user?.nickname);
+  const [textName, onChangeTextName] = useState(user?.nickname);
 
   requestBluetoothPermission();
   return (
     <>
       <ThemedText>
-        It's time to leave your mark Help this MateOnTour continue his journey
-        by hidding him somewhere cool
+        It's time to leave your mark Help this MateOnTour! continue his journey
+        by hidding him somewhere cool.
       </ThemedText>
-      <TextInput
+      <View className='m-8 items-center justify-center align-center bg-white'>
+      <TextInput className='m-4 text-xl bg-gray-100 rounded-full p-4'
+        style={{ padding: 16 }}
         onChangeText={onChangeTextName}
         value={textName}
       />
-      <TextInput
+      <TextInput className='m-4 text-xl bg-gray-100 rounded-full p-4'
+        style={{ padding: 16 }}
         onChangeText={onChangeTextName}
         value={textName}
         placeholder="Your clue"
       />
+      </View>
       <View>
         Date Hidden:{' '}
         {new Date().toLocaleDateString('en-US', {
