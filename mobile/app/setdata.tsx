@@ -17,14 +17,14 @@ async function saveDataToEsp(dayHidden: string, hiderName: string) {
     const device = devices[0];
     
     // Day hidden (to day)
-    device.writeCharacteristicWithoutResponseForService(
+    await device.writeCharacteristicWithoutResponseForService(
         '4fafc201-1fb5-459e-8fcc-c5c9c331914b',
         '489954f8-92c2-4449-b3d7-6ac3e41bcce8',
         atob(dayHidden)
     )
     
     // Hider name
-    device.writeCharacteristicWithoutResponseForService(
+    await device.writeCharacteristicWithoutResponseForService(
         '4fafc201-1fb5-459e-8fcc-c5c9c331914b',
         'beb5483e-36e1-4688-b7f5-ea07361b26a8',
         atob(hiderName)
