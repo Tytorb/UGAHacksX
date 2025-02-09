@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { manager } from '@/hooks/manager';
 import { requestBluetoothPermission } from '@/hooks/requestPerms';
 import { useAuth0 } from 'react-native-auth0';
+import Entypo from '@expo/vector-icons/Entypo';
 
 async function saveDataToEsp(dayHidden: string, hiderName: string) {
   const devices = await manager.connectedDevices(["4fafc201-1fb5-459e-8fcc-c5c9c331914b"])
@@ -34,6 +35,10 @@ function setdata(props: {}) {
   const {user} = useAuth0();
   const [textClue, onTextClueChange] = useState("");
 
+  const submitFn = () => {
+    saveDataToEsp(textClue, user?.name!);
+  }
+
   requestBluetoothPermission();
   return (
     <>
@@ -62,6 +67,14 @@ function setdata(props: {}) {
           day: '2-digit',
         })}
       </View>
+      <Entypo.Button
+        onPress={submitFn}
+        backgroundColor="#fff"
+        color={'#000'}
+        accessibilityLabel="Submit"
+        size={24}
+        name="check"
+      />
     </>
   );
 }

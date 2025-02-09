@@ -95,7 +95,7 @@ int readLightSensor() {
   return analogValue;
 }
 
-float readThermistorTemperature(String hiddenByu, String lastHiddenu) {
+float readThermistorTemperature(String lastHiddenu, String hiddenByu) {
   // Read Thermistor Temperature
   int adcValue = analogRead(THERMISTOR_PIN);
   float voltage = adcValue * (3.3 / 4095.0);

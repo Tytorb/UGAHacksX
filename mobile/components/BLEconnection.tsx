@@ -114,7 +114,7 @@ export function BLEconnection(props: {}) {
         onPress={() => router.push('/setdata')}
         backgroundColor="#fff"
         color={'#000'}
-        accessibilityLabel="Create Mate's Next Location"
+        accessibilityLabel="Create this Rock'n Riddle's Next Location"
         size={24}
         name="edit"
       />
