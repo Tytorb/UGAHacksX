@@ -1,4 +1,4 @@
-import { PermissionsAndroid, Platform, TextInput, View } from 'react-native';
+import { PermissionsAndroid, Platform, Text, TextInput, View } from 'react-native';
 import { ThemedText } from '../components/ThemedText';
 import { useEffect, useState } from 'react';
 import { manager } from '@/hooks/manager';
@@ -36,7 +36,7 @@ function setdata(props: {}) {
   const [textClue, onTextClueChange] = useState("");
 
   const submitFn = () => {
-    saveDataToEsp(textClue, user?.name!);
+    saveDataToEsp((new Date()).toLocaleDateString(), user?.name!)
   }
 
   requestBluetoothPermission();
@@ -58,14 +58,9 @@ function setdata(props: {}) {
         value={textClue}
         placeholder="Your clue"
       />
+      <View className='m-8 text-l bg-gray-100 rounder-full p-4'>
+        <Text>Date Hidden:{(new Date()).toLocaleDateString()}</Text>
       </View>
-      <View>
-        Date Hidden:{' '}
-        {new Date().toLocaleDateString('en-US', {
-          year: '2-digit',
-          month: '2-digit',
-          day: '2-digit',
-        })}
       </View>
       <Entypo.Button
         onPress={submitFn}
