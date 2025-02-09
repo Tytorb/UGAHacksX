@@ -1,4 +1,4 @@
-import { Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import { ThemedText } from './ThemedText';
 import { useEffect, useRef, useState } from 'react';
 import { manager } from '@/hooks/manager';
@@ -6,6 +6,7 @@ import { BleError, Characteristic, Device } from 'react-native-ble-plx';
 import { requestBluetoothPermission } from '@/hooks/requestPerms';
 import Entypo from '@expo/vector-icons/Entypo';
 import { Link, router } from 'expo-router';
+import Feather from '@expo/vector-icons/Feather';
 
 function scanAndConnect(message: (arg0: any) => void, scanD: () => void) {
   message('searcing for device');
@@ -103,21 +104,19 @@ export function BLEconnection(props: {}) {
 
   return (
     <>
-      <ThemedText>Connect to the Rock'n Riddles band on tour</ThemedText>
+      <ThemedText>Record the next step of this Rock'n Riddle's band on tour.</ThemedText>
       <ThemedText>Scanned {scanCount} devices</ThemedText>
       <View>
         {messages.map((message, key) => {
           return <Text key={key}>{JSON.stringify(message)}</Text>;
         })}
       </View>
-      <Entypo.Button
-        onPress={() => router.push('/setdata')}
-        backgroundColor="#fff"
-        color={'#000'}
-        accessibilityLabel="Create this Rock'n Riddle's Next Location"
-        size={24}
-        name="edit"
-      />
+          <Pressable className='flex-col gap-0 p-4 rounded-full items-center bg-blue-600' onPress={() => router.push('/setdata')}         accessibilityLabel="Create this Rock'n Riddle's Next Location">
+          <View className='justify-left flex-row gap-4 content-center'>
+          <Feather size={28} name='edit' className="self-center" color="white" />
+          <Text className="text-white text-2xl font-medium">Record</Text>
+          </View>
+    </Pressable>
     </>
   );
 }
