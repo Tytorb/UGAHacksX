@@ -7,6 +7,7 @@
 #include "FS.h"
 #include <LittleFS.h>
 
+
 #include <ESP32Time.h>
 
 //ESP32Time rtc;
@@ -14,11 +15,14 @@ ESP32Time rtc(3600);  // offset in seconds GMT+1
 
 
 #define FORMAT_LITTLEFS_IF_FAILED true
-#define CLEAR_SENSOR_STORAGE false
+#define CLEAR_SENSOR_STORAGE true
 
 
 #define SERVICE_UUID "4fafc201-1fb5-459e-8fcc-c5c9c331914b"
+
+// Set and read the hider name uuid
 #define WRITE_HIDER_CHARACTERISTIC_UUID "beb5483e-36e1-4688-b7f5-ea07361b26a8"
+// set and read the hide date
 #define WRITE_HIDE_DATE_CHARACTERISTIC_UUID "489954f8-92c2-4449-b3d7-6ac3e41bcce8"
 
 BLEUUID *WRITE_HIDER_UUID = new BLEUUID(WRITE_HIDER_CHARACTERISTIC_UUID);
@@ -30,7 +34,7 @@ BLECharacteristic sendSensorDataToggle("0a036069-5526-4023-9b1a-3f1bb713bf68", B
 // Input To Set Time
 BLECharacteristic setTimeCharacteristic("331f29ef-4396-4a63-a012-496def467096", BLECharacteristic::PROPERTY_WRITE);
 
-// Temp Data
+// Sensor Data
 BLECharacteristic sensorDataCharacteristic("f78ebbff-c8b7-4107-93de-889a6a06d408", BLECharacteristic::PROPERTY_NOTIFY);
 BLEDescriptor sensorDataCharacteristicDescripter(BLEUUID((uint16_t)0x2902));
 
@@ -42,10 +46,10 @@ bool deviceConnected = false;
 
 double tempF;
 
-int sense_count = 0; 
+int sense_count = 0;
 
 // 20 the the maximum size but we will do 40 and then yell if it goes over
-char *sensorBuff = (char*)calloc(40, sizeof(char));
+char *sensorBuff = (char *)calloc(40, sizeof(char));
 
 class MyServerCallbacks : public BLEServerCallbacks {
   void onConnect(BLEServer *pServer) {
@@ -68,6 +72,8 @@ class SentTimeCallback : public BLECharacteristicCallbacks {
 
 void setup() {
   Serial.begin(115200);
+  SetupDevices();
+
 
   // Settng up recording files
   if (!LittleFS.begin(FORMAT_LITTLEFS_IF_FAILED)) {
@@ -140,10 +146,10 @@ void setup() {
   rtc.setTime(readTimeFile(LittleFS, "/lastTime.txt"));  // 17th Jan 2021 15:24:30
 
 
-  BLEDevice::init("MateOnTour - Rocky");
+  BLEDevice::init("MateOnTour - Tony Tone");
   BLEServer *pServer = BLEDevice::createServer();
 
-  BLEService *pService = pServer->createService(SERVICE_UUID);
+  BLEService *pService = pServer->createService(BLEUUID(SERVICE_UUID), 25);
   pServer->setCallbacks(new MyServerCallbacks());
 
   SetValuesCallback *valuesCallback = new SetValuesCallback();
@@ -178,17 +184,15 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  tempF = random(500) / 10;
-  static char temperatureFTemp[6];
-  dtostrf(tempF, 6, 2, temperatureFTemp);
-  sprintf(sensorBuff, "%lu", rtc.getEpoch());
-  strcat(sensorBuff, " ");
-  strcat(sensorBuff, temperatureFTemp);
-  strcat(sensorBuff, ";");
+  tempF = readThermistorTemperature(lastHider, lastHideDate);
+  int lightSensor = readLightSensor() / 10;
+  static char temperatureFTemp[7];
+  dtostrf(tempF, 3, 1, temperatureFTemp);
+  sprintf(sensorBuff, "%lu %s %d;", rtc.getEpoch(), temperatureFTemp, lightSensor);
   Serial.println(sensorBuff);
   appendFile(LittleFS, "/tempF.txt", sensorBuff);
-  for(int i = 0; i< 19; i++){
-    if(sensorBuff[21 + i] != 0) {
+  for (int i = 0; i < 19; i++) {
+    if (sensorBuff[21 + i] != 0) {
       Serial.println("IMPENDING DATA LOSS FROM TOO LONG PACKET");
     }
   }
@@ -196,5 +200,5 @@ void loop() {
   if (sense_count++ % 16 == 15) {
     writeTimeFile(LittleFS, "/lastTime.txt", rtc.getEpoch());
   }
-  delay(50000);
+  delay(5000);
 }
