@@ -3,38 +3,57 @@ import { ThemedText } from '../components/ThemedText';
 import { useEffect, useState } from 'react';
 import { manager } from '@/hooks/manager';
 import { requestBluetoothPermission } from '@/hooks/requestPerms';
-import React from 'react';
+import { useAuth0 } from 'react-native-auth0';
 
-function scanAndConnect(setScan: (arg0: string) => void) {
-  setScan('started scan');
+async function saveDataToEsp(dayHidden: string, hiderName: string) {
+  const devices = await manager.connectedDevices(["4fafc201-1fb5-459e-8fcc-c5c9c331914b"])
+  
+  if(devices.length === 0) {
+    console.error("no device found")
+    return;
+  } else {
+    const device = devices[0];
+
+    // Day hidden (to day)
+    device.writeCharacteristicWithoutResponseForService(
+        '4fafc201-1fb5-459e-8fcc-c5c9c331914b',
+        '489954f8-92c2-4449-b3d7-6ac3e41bcce8',
+        atob(dayHidden)
+    )
+    
+    // Hider name
+    device.writeCharacteristicWithoutResponseForService(
+        '4fafc201-1fb5-459e-8fcc-c5c9c331914b',
+        '489954f8-92c2-4449-b3d7-6ac3e41bcce8',
+        atob(hiderName)
+    )
+  }
 }
 
 function setdata(props: {}) {
-  const [scanState, setScanState] = useState('scan not started');
-  const [textName, onChangeTextName] = React.useState('');
+  const {user} = useAuth0();
+  const [textName, onChangeTextName] = useState(user?.name);
 
   requestBluetoothPermission();
-
-  useEffect(() => {
-    scanAndConnect((str) => setScanState(str));
-  }, [setScanState]);
   return (
     <>
       <ThemedText>
-        It's time to leave your mark Help this MateOnTour continue his journey
-        by hidding him somewhere cool
+        It's time to leave your mark Help this MateOnTour! continue his journey
+        by hidding him somewhere cool.
       </ThemedText>
-      <ThemedText>{scanState}</ThemedText>
-      <TextInput
+      <View className='m-8 items-center justify-center align-center bg-white'>
+      <TextInput className='m-4 text-xl bg-gray-100 rounded-full p-4'
+        style={{ padding: 16 }}
         onChangeText={onChangeTextName}
         value={textName}
-        placeholder="Your Name"
       />
-      <TextInput
+      <TextInput className='m-4 text-xl bg-gray-100 rounded-full p-4'
+        style={{ padding: 16 }}
         onChangeText={onChangeTextName}
         value={textName}
         placeholder="Your clue"
       />
+      </View>
       <View>
         Date Hidden:{' '}
         {new Date().toLocaleDateString('en-US', {

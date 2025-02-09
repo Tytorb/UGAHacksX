@@ -58,7 +58,7 @@ export default function TabLayout() {
               source={{
                 uri: user?.picture,
               }}
-              style={{ width: 28, height: 28 }} // Add explicit dimensions
+              style={{ width: 28, height: 28, borderRadius: 999 }} // Add explicit dimensions
             />
           ),
         }}
