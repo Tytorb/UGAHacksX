@@ -5,6 +5,7 @@ import { manager } from '@/hooks/manager';
 import { requestBluetoothPermission } from '@/hooks/requestPerms';
 import { useAuth0 } from 'react-native-auth0';
 import Entypo from '@expo/vector-icons/Entypo';
+import { router } from 'expo-router';
 
 async function saveDataToEsp(dayHidden: string, hiderName: string) {
   const devices = await manager.connectedDevices(["4fafc201-1fb5-459e-8fcc-c5c9c331914b"])
@@ -14,7 +15,7 @@ async function saveDataToEsp(dayHidden: string, hiderName: string) {
     return;
   } else {
     const device = devices[0];
-
+    
     // Day hidden (to day)
     device.writeCharacteristicWithoutResponseForService(
         '4fafc201-1fb5-459e-8fcc-c5c9c331914b',
@@ -25,7 +26,7 @@ async function saveDataToEsp(dayHidden: string, hiderName: string) {
     // Hider name
     device.writeCharacteristicWithoutResponseForService(
         '4fafc201-1fb5-459e-8fcc-c5c9c331914b',
-        '489954f8-92c2-4449-b3d7-6ac3e41bcce8',
+        'beb5483e-36e1-4688-b7f5-ea07361b26a8',
         atob(hiderName)
     )
   }
@@ -35,8 +36,9 @@ function setdata(props: {}) {
   const {user} = useAuth0();
   const [textClue, onTextClueChange] = useState("");
 
-  const submitFn = () => {
-    saveDataToEsp((new Date()).toLocaleDateString(), user?.name!)
+  const submitFn = async () => {
+    await saveDataToEsp((new Date()).toLocaleDateString(), user?.name!);
+    router.push("/")
   }
 
   requestBluetoothPermission();
