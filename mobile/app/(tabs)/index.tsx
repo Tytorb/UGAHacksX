@@ -32,6 +32,7 @@ const MATEDATA = [
     goal: 'San Jose, CA',
     clue: 'At the coolest event in athens, by a table with a sign...',
     id: '0000001',
+    imgsrc: '@/assets/images/rocker1.png',
   },
   {
     name: 'Clue Zepplin',
@@ -158,6 +159,7 @@ const MyList = () => {
               area={item.area}
               goal={item.goal}
               id={item.id}
+              imgsrc={item.imgsrc}
             />
           </View>
         );
