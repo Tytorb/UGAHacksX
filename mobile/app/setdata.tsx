@@ -41,7 +41,7 @@ function setdata(props: {}) {
 
   requestBluetoothPermission();
   return (
-    <>
+    <View className='bg-white p-8 h-full'>
       <ThemedText>
         It's time to leave your mark help this band continue thier tour around the country
         by hidding them somewhere cool.
@@ -75,7 +75,8 @@ function setdata(props: {}) {
         size={24}
         name="check"
       />
-    </>
+    <View/>
+    </View>
   );
 }
 

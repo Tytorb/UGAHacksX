@@ -60,7 +60,7 @@ function RootLayout() {
       {!loggedIn && <Text>You are not logged in</Text>}
       {error && <Text>{error.message}</Text>}
 
-      <Button
+      <Button 
         onPress={loggedIn ? onLogout : onLogin}
         title={loggedIn ? 'Log Out' : 'Log In'}
       />

@@ -39,12 +39,7 @@ export default function DevicePage() {
 
   // Render the component based on the 'id'
   return (
-    <ScrollView>
-      <Link href={'./add-info/' + id}>
-        <Text className="text-2xl font-medium color-blue-600">
-          Add more info
-        </Text>
-      </Link>
+    <ScrollView className='bg-white p-8'>
       <Stack.Screen options={{ headerBackTitle: 'Explore' }} />
       <Text>Device ID: {id}</Text>
       <BLEconnection />
