@@ -5,9 +5,11 @@ import { ThemedView } from '@/components/ThemedView';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import Feather from '@expo/vector-icons/Feather';
-import { IconSymbol } from '@/components/ui/IconSymbol';
+import { useAuth0 } from 'react-native-auth0';
 
 export default function Profile() {
+  const { user } = useAuth0();
+
   const router = useRouter();
   return (
     <SafeAreaView style={{ backgroundColor: '#fff', height: '100%' }}>
@@ -46,16 +48,14 @@ export default function Profile() {
             alignItems: 'center',
           }}
         >
-          <Feather.Button
-            onPress={() => router.push('doesntexist')}
-            backgroundColor="#fff"
-            color={'#000'}
-            accessibilityLabel="Open settings"
-            size={64}
-            name="user"
+          <Image
+            source={{
+              uri: user?.picture,
+            }}
+            style={{ width: 50, height: 50 }} // Add explicit dimensions
           />
           <ThemedView>
-            <ThemedText type="title">John Doe</ThemedText>
+            <ThemedText type="title">{user?.name}</ThemedText>
           </ThemedView>
         </ThemedView>
       </ScrollView>

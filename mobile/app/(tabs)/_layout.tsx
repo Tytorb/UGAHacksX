@@ -1,6 +1,6 @@
 import { Tabs, Stack } from 'expo-router';
-import React from 'react';
-import { Platform } from 'react-native';
+import React, { useEffect } from 'react';
+import { Button, Image, Platform, StyleSheet, Text, View } from 'react-native';
 
 import { HapticTab } from '@/components/HapticTab';
 import { IconSymbol } from '@/components/ui/IconSymbol';
@@ -8,11 +8,41 @@ import TabBarBackground from '@/components/ui/TabBarBackground';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import Feather from '@expo/vector-icons/Feather';
+import { Auth0Provider, useAuth0 } from 'react-native-auth0';
 
-export default function TabLayout() {
+function TabLayout() {
   const colorScheme = useColorScheme();
+  const { authorize, clearSession, user, error, isLoading } = useAuth0();
 
-  return (
+  const onLogin = async () => {
+    try {
+      await authorize();
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const onLogout = async () => {
+    try {
+      await clearSession();
+    } catch (e) {
+      console.log('Log out cancelled');
+    }
+  };
+
+  const loggedIn = user !== undefined && user !== null;
+
+  return !loggedIn ? (
+    <View style={styles.container}>
+      {!loggedIn && <Text>You are not logged in</Text>}
+      {error && <Text>{error.message}</Text>}
+
+      <Button
+        onPress={loggedIn ? onLogout : onLogin}
+        title={loggedIn ? 'Log Out' : 'Log In'}
+      />
+    </View>
+  ) : (
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: '#000000',
@@ -54,10 +84,35 @@ export default function TabLayout() {
         name="user/[id]"
         options={{
           tabBarIcon: ({ color }) => (
-            <Feather size={28} name="smile" color={color} />
+            <Image
+              source={{
+                uri: user?.picture,
+              }}
+              style={{ width: 28, height: 28 }} // Add explicit dimensions
+            />
           ),
         }}
       />
     </Tabs>
   );
 }
+
+export default function App() {
+  return (
+    <Auth0Provider
+      domain="dev-ekqy8oookh1isaek.us.auth0.com"
+      clientId="KZeg9aWZuZUebf73q9nFOKfVmtuyI1iG"
+    >
+      <TabLayout />
+    </Auth0Provider>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F5FCFF',
+  },
+});

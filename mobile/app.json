@@ -45,7 +45,13 @@
         }
       ],
       "expo-font",
-      ["react-native-ble-plx"]
+      ["react-native-ble-plx"],
+      [
+        "react-native-auth0",
+        {
+          "domain": "dev-ekqy8oookh1isaek.us.auth0.com"
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true
@@ -55,7 +61,7 @@
         "origin": false
       },
       "eas": {
-        "projectId": "7769df7e-2a4c-4fcc-addc-43eb89ab5bbd"
+        "projectId": "694be9d5-92b3-447c-b868-26b061e60c51"
       }
     }
   }

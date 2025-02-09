@@ -35,5 +35,14 @@
         <data android:scheme="exp+mobile"/>
       </intent-filter>
     </activity>
+    <activity android:name="com.auth0.android.provider.RedirectActivity" tools:node="replace" android:exported="true">
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW"/>
+        <category android:name="android.intent.category.DEFAULT"/>
+        <category android:name="android.intent.category.BROWSABLE"/>
+        <data android:scheme="com.yourcompany.yourappname.auth0" android:host="dev-ekqy8oookh1isaek.us.auth0.com"/>
+        <data android:scheme="com.yourcompany.yourappname.auth0" android:host="dev-ekqy8oookh1isaek.us.auth0.com"/>
+      </intent-filter>
+    </activity>
   </application>
 </manifest>
