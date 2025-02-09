@@ -111,10 +111,10 @@ export function BLEconnection(props: {}) {
           return <Text key={key}>{JSON.stringify(message)}</Text>;
         })}
       </View>
-          <Pressable className='flex-col gap-0 p-4 rounded-full items-center bg-blue-600' onPress={() => router.push('/setdata')}         accessibilityLabel="Create this Rock'n Riddle's Next Location">
+          <Pressable className='flex-col gap-0 p-3 rounded-full items-center justify-center bg-blue-600' onPress={() => router.push('/setdata')}         accessibilityLabel="Create this Rock'n Riddle's Next Location">
           <View className='justify-left flex-row gap-4 content-center'>
           <Feather size={28} name='edit' className="self-center" color="white" />
-          <Text className="text-white text-2xl font-medium">Record</Text>
+          <Text className="text-white text-xl font-medium" style={{ lineHeight: 28 }}>Record</Text>
           </View>
     </Pressable>
     </>
