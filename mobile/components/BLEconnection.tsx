@@ -8,7 +8,6 @@ import Entypo from '@expo/vector-icons/Entypo';
 import { Link, router } from 'expo-router';
 
 function scanAndConnect(message: (arg0: any) => void, scanD: () => void) {
-  manager.cancelDeviceConnection("4fafc201-1fb5-459e-8fcc-c5c9c331914b")
   message('searcing for device');
 
   manager.startDeviceScan(null, null, async (error, device) => {

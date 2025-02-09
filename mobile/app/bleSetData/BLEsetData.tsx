@@ -6,7 +6,6 @@ import { requestBluetoothPermission } from '@/hooks/requestPerms';
 import React from 'react';
 
 function scanAndConnect(setScan: (arg0: string) => void) {
-  manager.cancelDeviceConnection("4fafc201-1fb5-459e-8fcc-c5c9c331914b")
   setScan('started scan');
   manager.startDeviceScan(null, null, (error, device) => {
     if (error) {
