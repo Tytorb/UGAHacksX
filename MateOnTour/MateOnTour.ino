@@ -201,5 +201,5 @@ void loop() {
   if (sense_count++ % 16 == 15) {
     writeTimeFile(LittleFS, "/lastTime.txt", rtc.getEpoch());
   }
-  delay(5000);
+  delay(3000);
 }
