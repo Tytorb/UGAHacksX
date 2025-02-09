@@ -32,7 +32,7 @@ async function saveDataToEsp(dayHidden: string, hiderName: string) {
 
 function setdata(props: {}) {
   const {user} = useAuth0();
-  const [textName, onChangeTextName] = useState(user?.nickname);
+  const [textName, onChangeTextName] = useState(user?.name);
 
   requestBluetoothPermission();
   return (
