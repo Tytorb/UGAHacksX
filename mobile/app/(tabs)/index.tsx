@@ -32,7 +32,7 @@ const MATEDATA = [
     goal: 'San Jose, CA',
     clue: 'At the coolest event in athens, by a table with a sign...',
     id: '0000001',
-    imgsrc: '@/assets/images/rocker1.png',
+    imgsrc: require('@/assets/images/rocker4.png'),
   },
   {
     name: 'Clue Zepplin',
@@ -42,6 +42,7 @@ const MATEDATA = [
     goal: 'San Jose, CA',
     clue: 'Look under a rock by the river...',
     id: '0000002',
+    imgsrc: require('@/assets/images/rocker5.png'),
   },
   {
     name: 'My Name (item 3)',
@@ -51,6 +52,7 @@ const MATEDATA = [
     goal: 'Panama City, FL',
     clue: 'Look under a rock by the river...',
     id: '0000003',
+    imgsrc: require('@/assets/images/rocker3.png'),
   },
   {
     name: 'My Name (item 4)',
@@ -60,6 +62,7 @@ const MATEDATA = [
     goal: 'San Jose, CA',
     clue: 'Look under a rock by the river...',
     id: '0000004',
+    imgsrc: require('@/assets/images/rocker2.png'),
   },
 ];
 

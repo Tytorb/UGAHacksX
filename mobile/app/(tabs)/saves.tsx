@@ -25,22 +25,24 @@ import '../../global.css';
 
 const MATEDATA = [
   {
-    name: 'My Name (item 1)',
-    hider: 'Theo',
+    name: 'saved 1',
+    hider: 'Owen',
     area: 'Athens, GA',
     origin: 'New York City, NY',
     goal: 'San Jose, CA',
-    clue: 'Look under a rock by the river...',
+    clue: 'At the coolest event in athens, by a table with a sign...',
     id: '0000001',
+    imgsrc: require('@/assets/images/rocker4.png'),
   },
   {
-    name: 'My Name (item 2)',
+    name: 'saved 2',
     hider: 'Theo',
     area: 'Athens, GA',
     origin: 'New York City, NY',
     goal: 'San Jose, CA',
     clue: 'Look under a rock by the river...',
     id: '0000002',
+    imgsrc: require('@/assets/images/rocker3.png'),
   },
   {
     name: 'My Name (item 3)',
@@ -50,6 +52,7 @@ const MATEDATA = [
     goal: 'Panama City, FL',
     clue: 'Look under a rock by the river...',
     id: '0000003',
+    imgsrc: require('@/assets/images/rocker2.png'),
   },
   {
     name: 'My Name (item 4)',
@@ -59,6 +62,7 @@ const MATEDATA = [
     goal: 'San Jose, CA',
     clue: 'Look under a rock by the river...',
     id: '0000004',
+    imgsrc: require('@/assets/images/rocker1.png'),
   },
 ];
 
@@ -158,6 +162,7 @@ const MyList = () => {
               area={item.area}
               goal={item.goal}
               id={item.id}
+              imgsrc={item.imgsrc}
             />
           </View>
         );
