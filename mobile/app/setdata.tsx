@@ -47,7 +47,7 @@ function setdata(props: {}) {
   return (
     <View className='bg-white p-8 h-full pt-48'>
       <Text className='text-2xl font-medium'>
-        Help this band make it by moving them one step closer to their destination! Remember to leave a clue.
+      Record the next step of this Rock'n Riddle's band!
       </Text>
       <View className='my-8 items-center justify-center align-center bg-white gap-4'>
       <TextInput className='flex-col p-3 rounded-xl items-center justify-center bg-gray-100 w-full'

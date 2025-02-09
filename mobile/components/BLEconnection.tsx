@@ -107,7 +107,7 @@ export function BLEconnection(props: {}) {
       <View className='flex-col h-full justify-between'>
         <View className='bg-white rounded-3xl gap-2'>
         <Text className='text-2xl font-medium'>
-            Record the next step of this Rock'n Riddle's band!
+            Find the next Rock'n Riddle's band location!
         </Text>
         <Text className='text-lg font-regular color-gray-500'>
             This is a riddle, follow these steps.
@@ -121,6 +121,29 @@ export function BLEconnection(props: {}) {
               return <Text key={key} style={styles.monospaceText}>{JSON.stringify(message)}</Text>;
             })}
         </ScrollView>
+
+
+        <Pressable
+          className={'flex-col gap-0 p-3 rounded-xl items-center justify-center bg-gray-100 mb-4'}
+          onPress={() => router.push('/history')}
+          accessibilityLabel="Open history page"
+        >
+          <View className="justify-left flex-row gap-4 content-center">
+            <Feather
+              size={28}
+              name="map"
+              className="self-center"
+              color="black"
+            />
+            <Text
+              className="text-black text-xl font-medium"
+              style={{ lineHeight: 28 }}
+            >
+              Journey
+            </Text>
+          </View>
+        </Pressable>
+
 
         <Pressable
           className={
