@@ -103,7 +103,7 @@ export function BLEconnection(props: {}) {
 
   return (
     <>
-      <ThemedText>Connect to the MateOnTour</ThemedText>
+      <ThemedText>Connect to the Rock'n Riddles band on tour</ThemedText>
       <ThemedText>Scanned {scanCount} devices</ThemedText>
       <View>
         {messages.map((message, key) => {
