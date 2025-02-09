@@ -7,13 +7,8 @@ import { requestBluetoothPermission } from '@/hooks/requestPerms';
 import Entypo from '@expo/vector-icons/Entypo';
 import { Link, router } from 'expo-router';
 import Feather from '@expo/vector-icons/Feather';
-import { getGroupItems, getItem } from '@/constants/queries';
 
-function scanAndConnect(
-  message: (arg0: any) => void,
-  scanD: () => void,
-  foundDevice: (arg0: any) => void
-) {
+function scanAndConnect(message: (arg0: any) => void, scanD: () => void) {
   message('searcing for device');
 
   manager.startDeviceScan(null, null, async (error, device) => {
@@ -29,7 +24,6 @@ function scanAndConnect(
       // Stop scanning as it's not necessary if you are scanning for one device.
       manager.stopDeviceScan();
       message('Device Found');
-      foundDevice(true);
 
       // Proceed with connection.
 
@@ -94,8 +88,7 @@ function scanAndConnect(
 export function BLEconnection(props: {}) {
   const [scanCount, setScanCount] = useState(0);
   const [messages, setMessages] = useState<any[]>([]);
-  const [foundDevice, setFoundDevice] = useState(false);
-  const [recentData, setRecentData] = useState(null);
+  const [foundDevice, setFoundDevice] = useState(true);
 
   requestBluetoothPermission();
 
@@ -106,43 +99,23 @@ export function BLEconnection(props: {}) {
 
   useEffect(() => {
     manager.stopDeviceScan();
-    scanAndConnect(
-      addMessage,
-      () => setScanCount((prev) => prev + 1),
-      setFoundDevice
-    );
+    scanAndConnect(addMessage, () => setScanCount((prev) => prev + 1));
   }, [setScanCount]);
-
-  useEffect(() => {
-    getGroupItems().then((items) => {
-      getItem(items?.rows[0].ipfs_pin_hash).then((item) => setRecentData(item));
-    });
-  }, []);
 
   return (
     <>
-<<<<<<< HEAD
       <View className='flex-col h-full justify-between'>
         <View className='bg-white rounded-3xl gap-2'>
         <Text className='text-2xl font-medium'>
             Find the next Rock'n Riddle's band location!
         </Text>
         <Text className='text-lg font-regular color-gray-500'>
-=======
-      <View className="flex-col h-full justify-between">
-        <View className="bg-white rounded-3xl gap-2">
-          <Text className="text-2xl font-medium">
-            Record the next step of this Rock'n Riddle's band!
-          </Text>
-          <Text className="text-lg font-regular color-gray-500">
->>>>>>> 9fcd4e0abf2084a8062cc703ec7f89dcdf817126
             This is a riddle, follow these steps.
-          </Text>
-          <Text className="text-lg font-regular color-gray-500">
-            Scanned {scanCount} devices
-          </Text>
+        </Text>
+        <Text className='text-lg font-regular color-gray-500'>
+          Scanned {scanCount} devices
+        </Text>
 
-<<<<<<< HEAD
         <ScrollView className='h-20 bg-gray-100 rounded-xl pt-2 mb-4 font-italic'>
             {messages.map((message, key) => {
               return <Text key={key} style={styles.monospaceText}>{JSON.stringify(message)}</Text>;
@@ -194,46 +167,9 @@ export function BLEconnection(props: {}) {
               style={{ lineHeight: 28 }}
             >
               Record
-=======
-          <ScrollView className="h-[200px] bg-gray-100 rounded-xl pt-2 mb-4 font-italic">
-            <Text key={'hint'} style={styles.monospaceText}>
-              {'Hint: ' + JSON.stringify(recentData?.hint)}
->>>>>>> 9fcd4e0abf2084a8062cc703ec7f89dcdf817126
             </Text>
-            {messages.map((message, key) => {
-              return (
-                <Text key={key} style={styles.monospaceText}>
-                  {JSON.stringify(message)}
-                </Text>
-              );
-            })}
-          </ScrollView>
-
-          <Pressable
-            className={
-              foundDevice
-                ? 'flex-col gap-0 p-3 rounded-xl items-center justify-center bg-blue-600'
-                : 'flex-col gap-0 p-3 rounded-xl items-center justify-center bg-blue-100'
-            }
-            onPress={() => router.push('/setdata')}
-            accessibilityLabel="Create this Rock'n Riddle's Next Location"
-            disabled={!foundDevice}
-          >
-            <View className="justify-left flex-row gap-4 content-center">
-              <Feather
-                size={28}
-                name="edit"
-                className="self-center"
-                color="white"
-              />
-              <Text
-                className="text-white text-xl font-medium"
-                style={{ lineHeight: 28 }}
-              >
-                Record
-              </Text>
-            </View>
-          </Pressable>
+          </View>
+        </Pressable>
         </View>
       </View>
     </>
