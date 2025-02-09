@@ -33,11 +33,14 @@ const DATA = [
 
 export default function Profile() {
   return (
-    <SafeAreaView style={{ backgroundColor: '#fff', height: '100%' }}>
+    <SafeAreaView className='bg-white h-full'>
       <ScrollView className='flex-col p-8 pt-0'>
-        <ListItem icon="user" title="Sign In" subheading="Sign into your account" goto='saves' />
-        <ListItem icon="user" title="Sign In" subheading="Sign into your account" goto='saves' />
-        <ListItem icon="user" title="Sign In" subheading="Sign into your account" goto='saves' />
+        <ListItem icon="smile" title="Edit Profile" subheading="Username, icon, bio" goto='saves' />
+        <ListItem icon="speaker" title="Devices" subheading="Connect, remove, view data" goto='saves' />
+        <ListItem icon="unlock" title="Account Center" subheading="Sign up, log in, log out" goto='saves' />
+        <ListItem icon="eye" title="Privacy" subheading="Profile visiblity, history" goto='saves' />
+        <ListItem icon="users" title="Friends" subheading="Add and remove friends" goto='saves' />
+        <ListItem icon="info" title="About" subheading="About (appname)" goto='saves' />
 
         <View className='flex-col justify-center items-center gap-1 mt-16'>
           <Text className='text-lg'>
