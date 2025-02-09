@@ -36,9 +36,10 @@ async function saveDataToEsp(dayHidden: string, hiderName: string) {
 function setdata(props: {}) {
   const {user} = useAuth0();
   const [textClue, onTextClueChange] = useState("");
+  const [textName, onTextNameChange] = useState(user?.name || ""); // Initialize with user name
 
   const submitFn = async () => {
-    await saveDataToEsp((new Date()).toLocaleDateString(), user?.name!);
+    await saveDataToEsp((new Date()).toLocaleDateString(), textName);
     router.push("/")
   }
 
@@ -52,7 +53,8 @@ function setdata(props: {}) {
       <View className='m-8 items-center justify-center align-center bg-white'>
       <TextInput className='m-4 text-xl bg-gray-100 rounded-full p-4'
         style={{ padding: 16 }}
-        value={user?.name}
+        value={textName}
+        onChangeText={(e) => onTextNameChange(e)} // Update state on text change
         editable={true}
       />
       <TextInput className='m-4 text-xl bg-gray-100 rounded-full p-4'
