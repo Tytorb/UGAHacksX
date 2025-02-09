@@ -51,16 +51,6 @@ int sense_count = 0;
 // 20 the the maximum size but we will do 40 and then yell if it goes over
 char *sensorBuff = (char *)calloc(40, sizeof(char));
 
-class MyServerCallbacks : public BLEServerCallbacks {
-  void onConnect(BLEServer *pServer) {
-    deviceConnected = true;
-  };
-  void onDisconnect(BLEServer *pServer) {
-    deviceConnected = false;
-    pServer->startAdvertising();
-  }
-};
-
 class SentTimeCallback : public BLECharacteristicCallbacks {
   void onWrite(BLECharacteristic *pCharacteristic) {
     unsigned long valueAsEpoch = strtoul(pCharacteristic->getValue().c_str(), NULL, 10);
@@ -73,6 +63,18 @@ class SentTimeCallback : public BLECharacteristicCallbacks {
 void setup() {
   Serial.begin(115200);
   SetupDevices();
+
+  class MyServerCallbacks : public BLEServerCallbacks {
+    void onConnect(BLEServer *pServer) {
+      deviceConnected = true;
+      playSong();
+    };
+    void onDisconnect(BLEServer *pServer) {
+      deviceConnected = false;
+      BLEAdvertising *pAdvertising = pServer->getAdvertising();
+      pAdvertising->start();
+    }
+  };
 
 
   // Settng up recording files

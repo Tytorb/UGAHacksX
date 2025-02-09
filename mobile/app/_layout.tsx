@@ -13,7 +13,6 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 
 import '../global.css';
 
-
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
@@ -47,6 +46,12 @@ export default function RootLayout() {
           options={{ headerShown: true, title: 'Device' }}
         />
         <Stack.Screen name="+not-found" />
+        <Stack.Screen
+          name="bleSetData"
+          options={{
+            presentation: 'modal',
+          }}
+        />
       </Stack>
       <StatusBar style="auto" />
     </ThemeProvider>

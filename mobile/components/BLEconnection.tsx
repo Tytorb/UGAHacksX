@@ -2,10 +2,13 @@ import { Text, View } from 'react-native';
 import { ThemedText } from './ThemedText';
 import { useEffect, useRef, useState } from 'react';
 import { manager } from '@/hooks/manager';
-import { BleError, Characteristic } from 'react-native-ble-plx';
+import { BleError, Characteristic, Device } from 'react-native-ble-plx';
 import { requestBluetoothPermission } from '@/hooks/requestPerms';
+import Entypo from '@expo/vector-icons/Entypo';
+import { Link, router } from 'expo-router';
 
 function scanAndConnect(message: (arg0: any) => void, scanD: () => void) {
+  manager.cancelDeviceConnection("4fafc201-1fb5-459e-8fcc-c5c9c331914b")
   message('searcing for device');
 
   manager.startDeviceScan(null, null, async (error, device) => {
@@ -53,12 +56,16 @@ function scanAndConnect(message: (arg0: any) => void, scanD: () => void) {
               return;
             }
             const data = atob(characteristic.value!).split(' ');
-            let date: Date = new Date(0)
-            date.setUTCSeconds(
-                  parseInt(data[0])
-                )
+            let date: Date = new Date(0);
+            date.setUTCSeconds(parseInt(data[0]));
             message(
-              'sensorData: ' + date.getTime() + " " + data[1] + "F " + parseInt(data[2])/400 + "% brightness"
+              'sensorData: ' +
+                date.getTime() +
+                ' ' +
+                data[1] +
+                'F ' +
+                parseInt(data[2]) / 400 +
+                '% brightness'
             );
           }
         );
@@ -104,6 +111,17 @@ export function BLEconnection(props: {}) {
           return <Text key={key}>{JSON.stringify(message)}</Text>;
         })}
       </View>
+        <Text>asdf</Text>
+        <Entypo.Button
+          onPress={() => router.push("/bleSetData/BLEsetData")}
+          backgroundColor="#fff"
+          color={'#000'}
+          accessibilityLabel="Set Device Data"
+          size={24}
+          name="edit"
+        >
+
+        </Entypo.Button>
     </>
   );
 }

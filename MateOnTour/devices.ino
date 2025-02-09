@@ -37,7 +37,7 @@ int melody[] = {
 };
 
 int noteDurations[] = {
-  8
+  8, 10
 };
 
 

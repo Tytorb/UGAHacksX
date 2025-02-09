@@ -1,11 +1,12 @@
 import { PermissionsAndroid, Platform, TextInput, View } from 'react-native';
-import { ThemedText } from './ThemedText';
+import { ThemedText } from '../../components/ThemedText';
 import { useEffect, useState } from 'react';
 import { manager } from '@/hooks/manager';
 import { requestBluetoothPermission } from '@/hooks/requestPerms';
 import React from 'react';
 
 function scanAndConnect(setScan: (arg0: string) => void) {
+  manager.cancelDeviceConnection("4fafc201-1fb5-459e-8fcc-c5c9c331914b")
   setScan('started scan');
   manager.startDeviceScan(null, null, (error, device) => {
     if (error) {
@@ -24,7 +25,7 @@ function scanAndConnect(setScan: (arg0: string) => void) {
   });
 }
 
-export function BLEconnection(props: {}) {
+export function BLEsetData(props: {}) {
   const [scanState, setScanState] = useState('scan not started');
   const [textName, onChangeTextName] = React.useState('');
 
