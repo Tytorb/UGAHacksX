@@ -110,17 +110,14 @@ export function BLEconnection(props: {}) {
           return <Text key={key}>{JSON.stringify(message)}</Text>;
         })}
       </View>
-        <Text>asdf</Text>
-        <Entypo.Button
-          onPress={() => router.push("/device/add-info", { id: 1 })}
-          backgroundColor="#fff"
-          color={'#000'}
-          accessibilityLabel="Set Device Data"
-          size={24}
-          name="edit"
-        >
-
-        </Entypo.Button>
+      <Entypo.Button
+        onPress={() => router.push('/setdata')}
+        backgroundColor="#fff"
+        color={'#000'}
+        accessibilityLabel="Create Mate's Next Location"
+        size={24}
+        name="edit"
+      />
     </>
   );
 }

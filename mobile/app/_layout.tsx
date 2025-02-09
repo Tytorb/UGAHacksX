@@ -47,7 +47,7 @@ export default function RootLayout() {
         />
         <Stack.Screen name="+not-found" />
         <Stack.Screen
-          name="bleSetData"
+          name="setdata"
           options={{
             presentation: 'modal',
           }}
