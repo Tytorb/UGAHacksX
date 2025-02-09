@@ -39,7 +39,6 @@ function RootLayout() {
 
   const onLogin = async () => {
     try {
-      console.error('test');
       await authorize();
     } catch (e) {
       console.log(e);
