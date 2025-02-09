@@ -35,7 +35,8 @@ At its core, our mission is simple: **to inspire people to explore, move, and li
 ### **Software**  
 - **React Native** (Deployed using Expo)  
 - **TypeScript** (Primary programming language)  
-- **Pinata** (Online storage solution)  
+- **Pinata** (Online storage solution)
+- **Auth0** (User Authentication and Data)
 - **Nativewind** (Styling framework)  
 - **Android Production Build** (Created using EAS command line)  
 - **Xcode** (For iOS production build)  
