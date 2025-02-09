@@ -1,4 +1,4 @@
-import { Pressable, Text, View } from 'react-native';
+import { Pressable, ScrollView, Text, View } from 'react-native';
 import { ThemedText } from './ThemedText';
 import { useEffect, useRef, useState } from 'react';
 import { manager } from '@/hooks/manager';
@@ -104,40 +104,51 @@ export function BLEconnection(props: {}) {
 
   return (
     <>
-      <ThemedText>
-        Record the next step of this Rock'n Riddle's band on tour.
-      </ThemedText>
-      <ThemedText>Scanned {scanCount} devices</ThemedText>
-      <View>
-        {messages.map((message, key) => {
-          return <Text key={key}>{JSON.stringify(message)}</Text>;
-        })}
-      </View>
-      <Pressable
-        className={
-          foundDevice
-            ? 'flex-col gap-0 p-3 rounded-full items-center justify-center bg-blue-600'
-            : 'bg-gray-600'
-        }
-        onPress={() => router.push('/setdata')}
-        accessibilityLabel="Create this Rock'n Riddle's Next Location"
-        disabled={!foundDevice}
-      >
-        <View className="justify-left flex-row gap-4 content-center">
-          <Feather
-            size={28}
-            name="edit"
-            className="self-center"
-            color="white"
-          />
-          <Text
-            className="text-white text-xl font-medium"
-            style={{ lineHeight: 28 }}
-          >
-            Record
-          </Text>
+      <View className='flex-col h-full justify-between'>
+        <View className='bg-white rounded-3xl gap-2'>
+        <Text className='text-2xl font-medium'>
+            Record the next step of this Rock'n Riddle's band!
+        </Text>
+        <Text className='text-lg font-regular color-gray-500'>
+            This is a riddle, follow these steps.
+        </Text>
+        <Text className='text-lg font-regular color-gray-500'>
+          Scanned {scanCount} devices
+        </Text>
+
+        <ScrollView className='h-20 bg-gray-100 rounded-lg pt-2 mb-4'>
+            {messages.map((message, key) => {
+              return <Text key={key}>{JSON.stringify(message)}</Text>;
+            })}
+        </ScrollView>
+
+        <Pressable
+          className={
+            foundDevice
+              ? 'flex-col gap-0 p-3 rounded-lg items-center justify-center bg-blue-600'
+              : 'flex-col gap-0 p-3 rounded-lg items-center justify-center bg-blue-100'
+          }
+          onPress={() => router.push('/setdata')}
+          accessibilityLabel="Create this Rock'n Riddle's Next Location"
+          disabled={!foundDevice}
+        >
+          <View className="justify-left flex-row gap-4 content-center">
+            <Feather
+              size={28}
+              name="edit"
+              className="self-center"
+              color="white"
+            />
+            <Text
+              className="text-white text-xl font-medium"
+              style={{ lineHeight: 28 }}
+            >
+              Record
+            </Text>
+          </View>
+        </Pressable>
         </View>
-      </Pressable>
+      </View>
     </>
   );
 }
