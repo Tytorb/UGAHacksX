@@ -47,28 +47,27 @@ function scanAndConnect(message: (arg0: any) => void, scanD: () => void) {
         );
       message('Last Hidden: ' + atob(lastDayHidden.value!));
 
-      const moniter =
-        await deviceServicesAndChar.monitorCharacteristicForService(
-          '4fafc201-1fb5-459e-8fcc-c5c9c331914b',
-          'f78ebbff-c8b7-4107-93de-889a6a06d408',
-          (error: BleError | null, characteristic: Characteristic | null) => {
-            if (error !== null || characteristic === null) {
-              return;
-            }
-            const data = atob(characteristic.value!).split(' ');
-            let date: Date = new Date(0);
-            date.setUTCSeconds(parseInt(data[0]));
-            message(
-              'sensorData: ' +
-                date.toLocaleTimeString() +
-                ' ' +
-                data[1] +
-                'F ' +
-                parseInt(data[2]) / 400 +
-                '% brightness'
-            );
+      await deviceServicesAndChar.monitorCharacteristicForService(
+        '4fafc201-1fb5-459e-8fcc-c5c9c331914b',
+        'f78ebbff-c8b7-4107-93de-889a6a06d408',
+        (error: BleError | null, characteristic: Characteristic | null) => {
+          if (error !== null || characteristic === null) {
+            return;
           }
-        );
+          const data = atob(characteristic.value!).split(' ');
+          let date: Date = new Date(0);
+          date.setUTCSeconds(parseInt(data[0]));
+          message(
+            'sensorData: ' +
+              date.toLocaleTimeString() +
+              ' ' +
+              data[1] +
+              'F ' +
+              parseInt(data[2]) / 400 +
+              '% brightness'
+          );
+        }
+      );
 
       await deviceServicesAndChar.writeCharacteristicWithoutResponseForService(
         '4fafc201-1fb5-459e-8fcc-c5c9c331914b',
@@ -89,6 +88,7 @@ function scanAndConnect(message: (arg0: any) => void, scanD: () => void) {
 export function BLEconnection(props: {}) {
   const [scanCount, setScanCount] = useState(0);
   const [messages, setMessages] = useState<any[]>([]);
+  const [foundDevice, setFoundDevice] = useState(false);
 
   requestBluetoothPermission();
 
@@ -104,19 +104,40 @@ export function BLEconnection(props: {}) {
 
   return (
     <>
-      <ThemedText>Record the next step of this Rock'n Riddle's band on tour.</ThemedText>
+      <ThemedText>
+        Record the next step of this Rock'n Riddle's band on tour.
+      </ThemedText>
       <ThemedText>Scanned {scanCount} devices</ThemedText>
       <View>
         {messages.map((message, key) => {
           return <Text key={key}>{JSON.stringify(message)}</Text>;
         })}
       </View>
-          <Pressable className='flex-col gap-0 p-3 rounded-full items-center justify-center bg-blue-600' onPress={() => router.push('/setdata')}         accessibilityLabel="Create this Rock'n Riddle's Next Location">
-          <View className='justify-left flex-row gap-4 content-center'>
-          <Feather size={28} name='edit' className="self-center" color="white" />
-          <Text className="text-white text-xl font-medium" style={{ lineHeight: 28 }}>Record</Text>
-          </View>
-    </Pressable>
+      <Pressable
+        className={
+          foundDevice
+            ? 'flex-col gap-0 p-3 rounded-full items-center justify-center bg-blue-600'
+            : 'bg-gray-600'
+        }
+        onPress={() => router.push('/setdata')}
+        accessibilityLabel="Create this Rock'n Riddle's Next Location"
+        disabled={!foundDevice}
+      >
+        <View className="justify-left flex-row gap-4 content-center">
+          <Feather
+            size={28}
+            name="edit"
+            className="self-center"
+            color="white"
+          />
+          <Text
+            className="text-white text-xl font-medium"
+            style={{ lineHeight: 28 }}
+          >
+            Record
+          </Text>
+        </View>
+      </Pressable>
     </>
   );
 }
